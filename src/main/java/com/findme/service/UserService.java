@@ -2,11 +2,13 @@ package com.findme.service;
 
 import com.findme.dao.UserDAO;
 import com.findme.models.User;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.HttpServerErrorException;
 
-@Transactional
+//@Transactional
 @Service
 public class UserService {
 
@@ -31,7 +33,7 @@ public class UserService {
         userDAO.delete(id);
     }
 
-    public User findById(Long id) throws Exception {
+    public User findById(Long id) throws HttpServerErrorException.InternalServerError, NotFoundException {
         return userDAO.findById(id);
     }
 }

@@ -2,22 +2,77 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Find me</title>
+    <meta charset="utf-8">
 </head>
 <body>
-<div>
+<div class="container">
     <div class="left">
         <h1>Photo</h1>
         <div>
-            <button class="">Send message</button>
+            <button class="btn">Send message</button>
         </div>
     </div>
     <div class="right">
-        Styled text here
-        <p th:text="${text}"></p>
+        <div class="item" id="firstName">
+            <span class="label"> First name: </span><span th:text="${user.firstName}"></span>
+        </div>
+        <div class="item" id="lastName">
+            <span class="label"> Last name: </span><span th:text="${user.lastName}"></span>
+        </div>
+        <div class="item" id="age">
+            <span class="label"> Age: </span><span th:text="${user.age}"></span>
+        </div>
+        <div class="item" id="phone">
+            <span class="label"> Phone: </span><span th:text="${user.phone}"></span>
+        </div>
+        <div class="item" id="email">
+            <span class="label"> Email: </span><span th:text="${user.email}"></span>
+        </div>
+        <div class="item" id="country">
+            <span class="label"> Country: </span><span th:text="${user.country}"></span>
+        </div>
+        <div class="item" id="city">
+            <span class="label"> City: </span><span th:text="${user.city}"></span>
+        </div>
     </div>
 </div>
 </body>
+<style>
+    .left {
+        float: left;
+        display: inline-block;
+        width: 200px;
+        height: 300px;
+        box-shadow: 0 2px 0 rgba(90, 97, 105, 0.11), 0 4px 8px rgba(90, 97, 105, 0.12), 0 10px 10px rgba(90, 97, 105, 0.06), 0 7px 70px rgba(90, 97, 105, 0.1);
+        border-radius: 15px;
+        margin: 15px;
+    }
 
+    .right {
+        width: 400px;
+        height: 300px;
+        text-align: center;
+        box-shadow: 0 2px 0 rgba(90, 97, 105, 0.11), 0 4px 8px rgba(90, 97, 105, 0.12), 0 10px 10px rgba(90, 97, 105, 0.06), 0 7px 70px rgba(90, 97, 105, 0.1);
+        border-radius: 15px;
+        display: inline-block;
+        margin: 15px;
+    }
+
+    .item {
+        margin: 15px;
+    }
+
+    .label {
+        font-size: 18px;
+        font-weight: bold;
+        color: green;
+    }
+    .container{
+        margin: 0;
+        padding: 5px;
+    }
+
+</style>
 <body>
 
 </body>

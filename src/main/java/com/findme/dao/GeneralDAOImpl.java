@@ -1,6 +1,10 @@
 package com.findme.dao;
 
 
+import com.findme.models.Post;
+import javassist.NotFoundException;
+import org.springframework.web.client.HttpServerErrorException;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -35,12 +39,8 @@ public abstract class GeneralDAOImpl<T> implements GeneralDAO<T> {
     }
 
     @Override
-    public T findById(Long id) throws Exception {
-        try {
+    public T findById(Long id) throws HttpServerErrorException.InternalServerError, NotFoundException {
             return entityManager.find(clazz, id);
-        } catch (Exception e) {
-            throw new Exception("Find : " + id + " failed" + e.getMessage());
-        }
     }
 
     @Override

@@ -1,9 +1,12 @@
 package com.findme.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -14,16 +17,16 @@ import java.util.List;
 @ToString
 @EqualsAndHashCode
 @Entity
-@Table(name = "USER")
+@Table(name = "USERS")
 public class User {
 
     @Id
-    @Column(name = "ID")
+    @Column(name = "id")
     @SequenceGenerator(name = "USER_ID_SEQ", sequenceName = "USER_ID_SEQ", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USER_ID_SEQ")
     private Long id;
 
-    @Column(name = "FIRST_NAME")
+    @Column(name = "first_name")
     private String firstName;
 
     @Column(name = "LAST_NAME")
@@ -40,7 +43,7 @@ public class User {
 
     //TODO from existed data
   //  @ManyToOne
-    @Column(name = "COUNTRY_ID")
+    @Column(name = "COUNTRY")
     private String country;
 
     @Column(name = "CITY")
@@ -69,7 +72,14 @@ public class User {
     @Column(name = "UNIVERSITY")
     private String university;
 
-/*    private List<Message> messagesSent;
-    private List<Message> messagesReceived;*/
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @JsonIgnore
+    @OneToMany (cascade = CascadeType.ALL, mappedBy = "userFrom")
+    private List<Message> messagesSent;
+
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @JsonIgnore
+    @OneToMany (cascade = CascadeType.ALL, mappedBy = "userTo")
+    private List<Message> messagesReceived;
 
 }

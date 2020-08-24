@@ -9,6 +9,10 @@ import javax.persistence.PersistenceContext;
 @Repository
 public class UserDAO extends GeneralDAOImpl<User> {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+//    @PersistenceContext
+//    private EntityManager entityManager;
+
+    public UserDAO() {
+        setClazz(User.class);
+    }
 }
