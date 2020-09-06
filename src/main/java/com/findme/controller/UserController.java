@@ -1,11 +1,9 @@
 package com.findme.controller;
 
+import com.findme.config.BadRequestException;
 import com.findme.models.User;
 import com.findme.service.UserService;
-import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,8 +20,8 @@ public class UserController {
         this.userService = userService;
     }
 
-    @RequestMapping(path="/user/{id}", method = RequestMethod.GET)
-    public String profile (Model model,@PathVariable String id) throws HttpServerErrorException.InternalServerError, NotFoundException {
+    @RequestMapping(path = "/user/{id}", method = RequestMethod.GET)
+    public String profile(Model model, @PathVariable String id) {
         try {
             User user = userService.findById(Long.parseLong(id));
             if (user != null) {
@@ -32,8 +30,10 @@ public class UserController {
             }
             return "404";
 
-        } catch (HttpServerErrorException.InternalServerError e) {
+        } catch (BadRequestException e) {
+            return "400";
 
+        } catch (HttpServerErrorException.InternalServerError e) {
             return "500";
         }
     }

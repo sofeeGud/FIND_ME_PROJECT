@@ -1,5 +1,6 @@
 package com.findme.service;
 
+import com.findme.config.BadRequestException;
 import com.findme.dao.PostDAO;
 import com.findme.models.Post;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,20 +19,20 @@ public class PostService {
     }
 
 
-    public Post save(Post post) throws Exception {
+    public Post save(Post post) throws BadRequestException {
         return postDAO.save(post);
     }
 
-    public Post update(Post post) throws Exception {
+    public Post update(Post post) throws BadRequestException {
         return postDAO.update(post);
     }
 
-    public void delete(Long id) throws Exception {
+    public void delete(Long id) throws BadRequestException {
         Post post = postDAO.findById(id);
         postDAO.delete(id);
     }
 
-    public Post findById(Long id) throws Exception {
+    public Post findById(Long id) throws BadRequestException {
         return postDAO.findById(id);
     }
 }

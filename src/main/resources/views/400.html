@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="image">
+            </div>
+        </div>
+        <div class="col">
+            <div class="error">
+                <h1>400</h1>
+                <div class="message">
+                    <p>Ой! Что-то пошло не так :(</p>
+                    <a href="/"><button><span>На главную</span></button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Comic Sans, cursive;
+    }
+
+    .container {
+
+    }
+
+    .row  {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .col {
+        width: 450px;
+        height: 450px;
+    }
+
+    .image {
+        background-image:url(https://ih1.redbubble.net/image.1006497309.4848/fposter,small,wall_texture,product,750x1000.u1.jpg);
+        background-position:center center;
+        width:450px;
+        height:450px;
+    }
+
+    .error {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        height: 450px;
+    }
+
+    .error h1 {
+        font-size: 150px;
+        margin:0;
+        color: #773B33;
+    }
+
+    .error .message {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .message p {
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .message button {
+        width: 150px;
+        height: 50px;
+        border: 0;
+        border-radius: 25px;
+        background: #FFAA4D;
+        color: #FFFFFF;
+        transition: .15s;
+    }
+
+    .message button:hover {
+        box-shadow: 0 2px 0 rgba(90, 97, 105, 0.11), 0 4px 8px rgba(90, 97, 105, 0.12), 0 10px 10px rgba(90, 97, 105, 0.06), 0 7px 70px rgba(90, 97, 105, 0.1);
+        cursor: pointer;
+    }
+
+    .message button span {
+        font-family: Comic Sans, cursive;
+        font-size: 16px;
+    }
+
+</style>
+</html>
