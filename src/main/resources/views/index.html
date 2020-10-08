@@ -9,5 +9,69 @@
         <h1>Welcome to Find me!</h1>
     </div>
 </div>
+<div>
+    <form id="registration-form">
+        <p>Please fill in this form to create an account.</p>
+        <div>
+            <span class="label">First name: </span><input type="text" name="firstName" required>
+        </div>
+        <div>
+            <span class="label">Last name: </span><input type="text" name="lastName" required>
+        </div>
+        <div>
+            <span class="label">Phone: </span><input type="text" name="phone" required>
+        </div>
+        <div>
+            <span class="label">Email: </span><input type="text" name="email" required>
+        </div>
+        <div>
+            <span class="label">Password: </span><input type="text" name="password" required>
+        </div>
+        <div>
+            <span class="label">Country: </span><input type="text" name="country" required>
+        </div>
+        <div>
+            <span class="label">City: </span><input type="text" name="city" required>
+        </div>
+        <div>
+            <span class="label">Age: </span><input type="text" name="age">
+        </div>
+        <div>
+            <button type="submit">registration</button>
+        </div>
+    </form>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </body>
+<style>
+    .label {
+        font-size: 18px;
+        font-weight: bold;
+        color: darkslateblue;
+    }
+
+</style>
+<script>
+    const form = $('#registration-form');
+    form.submit(function (e) {
+
+        e.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "/register-user",
+            data: form.serialize(),
+            success: function (data) {
+                alert('User registered successfully');
+                form[0].reset();
+            },
+            error: function (xhr) {
+                if (xhr.status == 400 && xhr.responseText)
+                    alert(xhr.responseText);
+                else
+                    alert('Internal server error')
+            }
+        });
+    });
+</script>
+
 </html>
