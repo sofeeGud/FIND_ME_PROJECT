@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
-@Log4j
 @Transactional
 @Service
 public class UserService {
@@ -26,7 +25,9 @@ public class UserService {
 
 
     public User save(User user) throws BadRequestException {
-        validateEmailAndPhone(user.getEmail(), user.getPhone());
+        if (userDAO.getUserByEmailOrPhone(user.getEmail(), user.getPhone()) != null) {
+            throw new BadRequestException("There is already registered user with this email or phone");
+        }
         user.setDateRegistered(new Date());
         return userDAO.save(user);
     }
@@ -57,9 +58,11 @@ public class UserService {
         return userDAO.findById(id);
     }
 
-    private void validateEmailAndPhone(String email, String phone) throws BadRequestException {
-        if (userDAO.getUserByEmailOrPhone(email, phone) != null) {
-            throw new BadRequestException("There is already registered user with this email or phone");
-        }
+    public User authorization(String email, String password) throws BadRequestException {
+        User user = userDAO.getUserByAuthorization(email, password);
+        if (user == null)
+            throw  new BadRequestException("User with email:" +email+" and password: *****  not found");
+        return user;
     }
+
 }
