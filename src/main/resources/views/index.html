@@ -40,7 +40,8 @@
             box-shadow: 0 2px 0 rgba(90, 97, 105, 0.11), 0 4px 8px rgba(90, 97, 105, 0.12), 0 10px 10px rgba(90, 97, 105, 0.06), 0 7px 70px rgba(90, 97, 105, 0.1);
             border-radius: 15px;
             margin: auto;
-            display: none;
+            overflow: hidden;
+            display: block;
         }
         .btn {
             width: 100px;
@@ -114,6 +115,7 @@
         </div>
         <div>
             <button class="btn enter_btn" type="submit">Enter</button>
+            <button id="regBtn" class="btn reg_btn">Registration</button>
         </div>
     </form>
 </div>
@@ -158,8 +160,8 @@
 
         e.preventDefault();
         $.ajax({
-            type: "POST",
-            url: "/registration",
+            type: "PUT",
+            url: "/users",
             data: form.serialize(),
             success: function (data) {
                 alert('User registered successfully');
@@ -180,7 +182,7 @@
         e.preventDefault();
         $.ajax({
             type: "POST",
-            url: "/authorization",
+            url: "/users",
             data: formLogin.serialize(),
             success: function (data) {
                 window.location.reload();
@@ -193,6 +195,12 @@
             }
         });
     });
+
+$("#regBtn").on("click",function (e) {
+    $(".reg").toggleClass("visible");
+    $(".aut").toggleClass("hidden");
+    
+})
 </script>
 
 </html>

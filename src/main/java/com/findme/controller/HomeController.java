@@ -14,7 +14,7 @@ public class HomeController {
     public String home(Model model, HttpSession session){
         String loggedUserId = (String) session.getAttribute("loggedUserId");
         if(loggedUserId != null)
-            return "redirect:/user/"+loggedUserId;
+            return "redirect:/users/"+loggedUserId;
         model.addAttribute("loggedUser", session.getAttribute("loggedUser"));
         return "index";
     }

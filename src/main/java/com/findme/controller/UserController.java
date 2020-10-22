@@ -26,7 +26,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @RequestMapping(path = "/user/{id}", method = RequestMethod.GET)
+    @RequestMapping(path = "/users/{id}", method = RequestMethod.GET)
     public String profile(HttpSession session, Model model, @PathVariable String id) {
 
         try {
@@ -51,7 +51,7 @@ public class UserController {
         }
     }
 
-    @RequestMapping(path = "/registration", method = RequestMethod.POST)
+    @RequestMapping(path = "/users", method = RequestMethod.PUT)
     public ResponseEntity<String> register(@ModelAttribute User user) {
         try {
             userService.save(user);
@@ -66,13 +66,13 @@ public class UserController {
     }
 
 
-    @RequestMapping(path = "/authorization", method = RequestMethod.POST)
+    @RequestMapping(path = "/users", method = RequestMethod.POST)
     public ResponseEntity<String> login(HttpSession session, HttpServletRequest request) {
         try {
             User user = userService.authorization(request.getParameter("email"), request.getParameter("password"));
             session.setAttribute("loggedUser", user);
             session.setAttribute("loggedUserId", String.valueOf(user.getId()));
-            return new ResponseEntity<>("redirect:/user/" + user.getId(), HttpStatus.OK);
+            return new ResponseEntity<>("redirect:/users/" + user.getId(), HttpStatus.OK);
         } catch (BadRequestException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
