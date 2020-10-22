@@ -8,6 +8,7 @@
             text-align: center;
             font-family: Comic Sans, cursive;
             font-size: 16px;
+            color: #FFAA4D;
         }
         .btn {
             width: 100px;
@@ -30,16 +31,62 @@
             box-shadow: 0 2px 0 rgba(90, 97, 105, 0.11), 0 4px 8px rgba(90, 97, 105, 0.12), 0 10px 10px rgba(90, 97, 105, 0.06), 0 7px 70px rgba(90, 97, 105, 0.1);
             cursor: pointer;
         }
+        .image {
+            background-image:url(https://ih1.redbubble.net/image.1006497309.4848/fposter,small,wall_texture,product,750x1000.u1.jpg);
+            background-position:center center;
+            width:450px;
+            height:450px;
+            margin: 0;
+        }
+        .left {
+            display: inline-block;
+            width: 200px;
+            height: 300px;
+            box-shadow: 0 2px 0 rgba(90, 97, 105, 0.11), 0 4px 8px rgba(90, 97, 105, 0.12), 0 10px 10px rgba(90, 97, 105, 0.06), 0 7px 70px rgba(90, 97, 105, 0.1);
+            border-radius: 15px;
+            margin: 0;
+        }
+
+        .right {
+            width: 400px;
+            height: 300px;
+            text-align: center;
+            box-shadow: 0 2px 0 rgba(90, 97, 105, 0.11), 0 4px 8px rgba(90, 97, 105, 0.12), 0 10px 10px rgba(90, 97, 105, 0.06), 0 7px 70px rgba(90, 97, 105, 0.1);
+            border-radius: 15px;
+            margin: 15px auto;
+            overflow: hidden;
+
+        }
+
+        .item {
+            margin: 15px;
+        }
+
+        .label {
+            font-size: 18px;
+            font-weight: bold;
+            color: #773B33;
+        }
+        .container{
+            position: absolute;
+            margin: 0 auto;
+
+        }
     </style>
 </head>
 <body>
+<div>
+    <a th:href="@{/logout}"><button class="btn enter_btn" style="float:right;" >Out</button></a>
+</div>
 <div class="container">
     <div class="left">
         <h1>Photo</h1>
-        <div>
-            <button class="btn">Send message</button>
-        </div>
     </div>
+    <div>
+        <button class="btn">Send message</button>
+    </div>
+</div>
+<div >
     <div class="right">
         <div class="item" id="firstName">
             <span class="label"> First name: </span><span th:text="${user.firstName}"></span>
@@ -63,47 +110,11 @@
             <span class="label"> City: </span><span th:text="${user.city}"></span>
         </div>
     </div>
-    <div>
-        <a th:href="@{/logout}"><button class="btn enter_btn" >Out</button></a>
-
-
-    </div>
+</div>
+<div class="image" style="float: right">
 </div>
 </body>
 <style>
-    .left {
-        float: left;
-        display: inline-block;
-        width: 200px;
-        height: 300px;
-        box-shadow: 0 2px 0 rgba(90, 97, 105, 0.11), 0 4px 8px rgba(90, 97, 105, 0.12), 0 10px 10px rgba(90, 97, 105, 0.06), 0 7px 70px rgba(90, 97, 105, 0.1);
-        border-radius: 15px;
-        margin: 15px;
-    }
-
-    .right {
-        width: 400px;
-        height: 300px;
-        text-align: center;
-        box-shadow: 0 2px 0 rgba(90, 97, 105, 0.11), 0 4px 8px rgba(90, 97, 105, 0.12), 0 10px 10px rgba(90, 97, 105, 0.06), 0 7px 70px rgba(90, 97, 105, 0.1);
-        border-radius: 15px;
-        display: inline-block;
-        margin: 15px;
-    }
-
-    .item {
-        margin: 15px;
-    }
-
-    .label {
-        font-size: 18px;
-        font-weight: bold;
-        color: green;
-    }
-    .container{
-        margin: 0;
-        padding: 5px;
-    }
 
 </style>
 

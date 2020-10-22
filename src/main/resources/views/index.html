@@ -7,14 +7,10 @@
             text-align: center;
             font-family: Comic Sans, cursive;
             font-size: 16px;
+            margin: 0;
         }
         .welcome{
             color: #773B33;
-        }
-        .label {
-            font-size: 18px;
-            font-weight: bold;
-            color: darkslateblue;
         }
 
         .aut {
@@ -30,13 +26,14 @@
             box-shadow: 0 2px 0 rgba(90, 97, 105, 0.11), 0 4px 8px rgba(90, 97, 105, 0.12), 0 10px 10px rgba(90, 97, 105, 0.06), 0 7px 70px rgba(90, 97, 105, 0.1);
             border-radius: 15px;
             margin: 150px auto;
-
+            z-index: 99;
+            transition: opacity 1s;
         }
 
         .reg {
-            width: 400px;
-            height: 300px;
-            text-align: left;
+            width: 600px;
+            height: 520px;
+            text-align: center;
             box-shadow: 0 2px 0 rgba(90, 97, 105, 0.11), 0 4px 8px rgba(90, 97, 105, 0.12), 0 10px 10px rgba(90, 97, 105, 0.06), 0 7px 70px rgba(90, 97, 105, 0.1);
             border-radius: 15px;
             margin: auto;
@@ -85,9 +82,16 @@
             padding-right: 5px;
             outline: none;
             text-align: center;
-
+            position: center;
         }
 
+        .hidden {
+            display: none;
+        }
+
+        .visible{
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -119,35 +123,36 @@
         </div>
     </form>
 </div>
-<div class="reg">
+<div class="reg hidden">
     <form id="registration-form">
-        <p>Please fill in this form to create an account.</p>
+        <p class="welcome" >Please fill in this form to create an account.</p>
         <div>
-            <span class="label">First name: </span><input type="text" name="firstName" required>
+            <input placeholder="First name*" type="text" name="firstName" required>
         </div>
         <div>
-            <span class="label">Last name: </span><input type="text" name="lastName" required>
+            <input placeholder="Last name*" type="text" name="lastName" required>
         </div>
         <div>
-            <span class="label">Phone: </span><input type="text" name="phone" required>
+            <input placeholder="Phone*" type="text" name="phone" required>
         </div>
         <div>
-            <span class="label">Email: </span><input type="text" name="email" required>
+            <input placeholder="Email*" type="text" name="email" required>
         </div>
         <div>
-            <span class="label">Password: </span><input type="text" name="password" required>
+            <input placeholder="Password*" type="text" name="password" required>
         </div>
         <div>
-            <span class="label">Country: </span><input type="text" name="country" required>
+            <input placeholder="Country" type="text" name="country">
         </div>
         <div>
-            <span class="label">City: </span><input type="text" name="city" required>
+            <input placeholder="City" type="text" name="city">
         </div>
         <div>
-            <span class="label">Age: </span><input type="text" name="age">
+            <input placeholder="Age" type="text" name="age">
         </div>
         <div>
-            <button type="submit">Registration</button>
+            <button class="btn enter_btn" type="submit">Registration</button>
+            <button id="regEnter" class="btn" >Enter</button>
         </div>
     </form>
 </div>
@@ -196,11 +201,11 @@
         });
     });
 
-$("#regBtn").on("click",function (e) {
+$("#regBtn, #regEnter").on("click",function (e) {
     $(".reg").toggleClass("visible");
-    $(".aut").toggleClass("hidden");
-    
+    $(".login").toggleClass("hidden");
 })
+
 </script>
 
 </html>
