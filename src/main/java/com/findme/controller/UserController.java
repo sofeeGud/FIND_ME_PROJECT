@@ -51,7 +51,7 @@ public class UserController {
         }
     }
 
-    @RequestMapping(path = "/users", method = RequestMethod.PUT)
+    @RequestMapping(path = "/users", method = RequestMethod.POST)
     public ResponseEntity<String> register(@ModelAttribute User user) {
         try {
             userService.save(user);
@@ -66,7 +66,7 @@ public class UserController {
     }
 
 
-    @RequestMapping(path = "/users", method = RequestMethod.POST)
+    @RequestMapping(path = "/login", method = RequestMethod.POST)
     public ResponseEntity<String> login(HttpSession session, HttpServletRequest request) {
         try {
             User user = userService.authorization(request.getParameter("email"), request.getParameter("password"));

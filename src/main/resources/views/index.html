@@ -165,7 +165,7 @@
 
         e.preventDefault();
         $.ajax({
-            type: "PUT",
+            type: "POST",
             url: "/users",
             data: form.serialize(),
             success: function (data) {
@@ -187,7 +187,7 @@
         e.preventDefault();
         $.ajax({
             type: "POST",
-            url: "/users",
+            url: "/login",
             data: formLogin.serialize(),
             success: function (data) {
                 window.location.reload();
