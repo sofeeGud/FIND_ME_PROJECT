@@ -22,6 +22,12 @@
             font-size: 16px;
 
         }
+        .btn_mini {
+            width: 75px;
+            height: 35px;
+            font-size: 10px;
+
+        }
         .enter_btn {
             background: #FFAA4D;
             color: #FFFFFF;
@@ -41,15 +47,15 @@
         .left {
             display: inline-block;
             width: 200px;
-            height: 300px;
+            height: 200px;
             box-shadow: 0 2px 0 rgba(90, 97, 105, 0.11), 0 4px 8px rgba(90, 97, 105, 0.12), 0 10px 10px rgba(90, 97, 105, 0.06), 0 7px 70px rgba(90, 97, 105, 0.1);
             border-radius: 15px;
             margin: 0;
         }
 
         .right {
-            width: 400px;
-            height: 300px;
+            width: 300px;
+            height: 800px;
             text-align: center;
             box-shadow: 0 2px 0 rgba(90, 97, 105, 0.11), 0 4px 8px rgba(90, 97, 105, 0.12), 0 10px 10px rgba(90, 97, 105, 0.06), 0 7px 70px rgba(90, 97, 105, 0.1);
             border-radius: 15px;
@@ -78,21 +84,18 @@
 <div>
     <a th:href="@{/logout}"><button class="btn enter_btn" style="float:right;" >Out</button></a>
 </div>
-<div class="container">
+<div class="container" style="margin-top:80px">
     <div class="left">
         <h1>Photo</h1>
     </div>
-    <div>
+<!--    <div>
         <button class="btn">Send message</button>
-    </div>
-</div>
+    </div>-->
+
 <div >
     <div class="right">
-        <div class="item" id="firstName">
-            <span class="label"> First name: </span><span th:text="${user.firstName}"></span>
-        </div>
-        <div class="item" id="lastName">
-            <span class="label"> Last name: </span><span th:text="${user.lastName}"></span>
+        <div class="item" >
+            <span id="firstName" th:text="${user.firstName}"></span>&ensp;<span id="lastName" th:text="${user.lastName}"></span>
         </div>
         <div class="item" id="age">
             <span class="label"> Age: </span><span th:text="${user.age}"></span>
@@ -109,13 +112,136 @@
         <div class="item" id="city">
             <span class="label"> City: </span><span th:text="${user.city}"></span>
         </div>
+        <div style="padding: 10px;">Status: <span th:text="${loggedUser.getId() == user.id ? 'Me' : (relStatus != null ? relStatus.name() : 'undefined')}">somebody</span></div>
+        <div id="relationship-status">
+            <div th:if="${loggedUser.getId() == user.id}">
+                <button class="btn enter_btn" th:if="${incomingRequests.size() > 0}">
+                    Incoming requests
+                    <span th:text="${incomingRequests.size()}">0</span>
+                </button>
+                <ul id="incomingReq" >
+                    <li th:each="usr : ${incomingRequests}" th:id="'incomingReq-' + ${usr.getId()}">
+                        <div>
+                            <span th:text="${usr.firstName}+' '+${usr.lastName}"></span>
+                        <button class="btn btn_mini" th:onclick="|requestUpdate('${usr.getId()}','REJECTED')|">
+                            Rejected
+                        </button>
+                        <button class="btn btn_mini enter_btn" id="accept" th:onclick="|requestUpdate('${usr.getId()}','FRIENDS')|">
+                            Add
+                        </button><br>
+                        </div>
+                    </li>
+                </ul>
+
+
+                <button class="btn enter_btn" th:if="${outgoingRequests.size() > 0}">
+                    Outgoing requests
+                    <span  th:text="${outgoingRequests.size()}">0</span>
+                </button>
+                <ul id="outgoingReq">
+                    <li th:each="usr : ${outgoingRequests}" th:id="'outgoingReq-' + ${usr.getId()}">
+                        <div>
+                            <span th:text="${usr.firstName}+' '+${usr.lastName}" style=""></span>
+                        <button class="btn btn_mini" th:onclick="|requestUpdate('${usr.getId()}','CANCELED')|">
+                            Canceled
+                        </button><br>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            </div>
+        <div th:if="${loggedUser.getId() != user.id}">
+            <div th:if="${btnViewProp == 'btn-remove'}">
+                <button class="btn btn_mini" id="removeFriend" th:onclick="|requestUpdate('${user.getId()}','DELETED')|">
+                    <i ></i>Remove Friend
+                </button>
+            </div>
+            <div th:if="${btnViewProp == 'btn-sent'}">
+                <span class="label">request sent</span>
+                <button class="btn btn_mini" th:onclick="|requestUpdate('${user.getId()}','CANCELED')|" style="margin-bottom: -7px;margin-top: -7px">
+                    Canceled
+                </button>
+            </div>
+            <div th:if="${btnViewProp == 'btn-rejected'}">
+                <span class="label">request rejected</span>
+            </div>
+            <div th:if="${btnViewProp == 'btn-addUpd'}">
+                <button class="btn btn_mini enter_btn" th:onclick="|requestUpdate('${user.getId()}','REQUESTED')|">
+                    Add Friend (update)
+                </button>
+            </div>
+            <div th:if="${btnViewProp == 'btn-addSave'}">
+                <button class="btn btn_mini enter_btn" th:onclick="|requestSave('${user.getId()}')|">
+                    Add Friend (save)
+                </button>
+            </div>
+            <div th:if="${btnViewProp == 'btn-accept'}">
+                Accept request
+                <button class="btn btn_mini" th:onclick="|requestUpdate('${user.getId()}','REJECTED')|" style="margin-bottom: -7px;margin-top: -7px">
+                    Reject
+                </button>
+                <button class="btn btn_mini enter_btn" th:onclick="|requestUpdate('${user.getId()}','FRIENDS')|" style="margin-bottom: -7px;margin-top: -7px">
+                    Add
+                </button>
+
+            </div>
+
+        </div>
+        <div th:if="${loggedUser.getId() == user.id || (relStatus != null && relStatus.name() == 'FRIENDS')}">
+                <div class="label">
+                    Friends
+                    <span th:text="${friendsCount}">0</span>
+                </div>
+            <div th:if="${friendsList.size() > 0}">
+                <br>
+                <div th:each="user : ${friendsList}" >
+                    <a style="text-decoration:none" th:href="@{'/users/' + ${user.getId()}}">
+                        <div style="width: 100%" th:text="${user.firstName}+' '+${user.lastName}"></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <br>
     </div>
+</div>
+
+
+        </div>
+    </div>
+</div>
 </div>
 <div class="image" style="float: right">
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </body>
-<style>
+<script>
+function requestSave(userId) {
+$.ajax({
 
-</style>
+type: "POST",
+url: "/save-relationship",
+data: {"userId": userId},
+success: function success() {
+window.location.reload();
+},
+error: function(xhr) {
+alert(xhr.responseText);
+}
+});
+}
 
+function requestUpdate(userId, status) {
+    $.ajax({
+        type: "POST",
+        url: "/update-relationship",
+        data: {"userId": userId, "status": status},
+        success: function success() {
+            window.location.reload();
+        },
+        error: function (xhr) {
+            alert(xhr.responseText);
+        }
+    });
+}
+</script>
 </html>
