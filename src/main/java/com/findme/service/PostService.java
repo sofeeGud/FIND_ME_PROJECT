@@ -1,6 +1,6 @@
 package com.findme.service;
 
-import com.findme.config.BadRequestException;
+import com.findme.exceptions.BadRequestException;
 import com.findme.dao.PostDAO;
 import com.findme.models.Post;
 import org.springframework.beans.factory.annotation.Autowired;

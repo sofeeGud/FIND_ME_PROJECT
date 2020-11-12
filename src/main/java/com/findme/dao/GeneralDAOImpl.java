@@ -1,10 +1,7 @@
 package com.findme.dao;
 
 
-import com.findme.config.BadRequestException;
-import com.findme.models.Post;
-import javassist.NotFoundException;
-import org.springframework.web.client.HttpServerErrorException;
+import com.findme.exceptions.BadRequestException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

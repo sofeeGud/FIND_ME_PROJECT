@@ -1,11 +1,10 @@
 package com.findme.service;
 
-import com.findme.config.BadRequestException;
+import com.findme.exceptions.BadRequestException;
 import com.findme.dao.UserDAO;
+import com.findme.exceptions.InternalServerError;
+import com.findme.exceptions.NotFoundException;
 import com.findme.models.User;
-import lombok.extern.log4j.Log4j;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +23,7 @@ public class UserService {
     }
 
 
-    public User save(User user) throws BadRequestException {
+    public User save(User user) throws InternalServerError, BadRequestException {
         if (userDAO.getUserByEmailOrPhone(user.getEmail(), user.getPhone()) != null) {
             throw new BadRequestException("There is already registered user with this email or phone");
         }
@@ -32,7 +31,7 @@ public class UserService {
         return userDAO.save(user);
     }
 
-    public User update(User user) throws BadRequestException {
+    public User update(User user) throws InternalServerError, BadRequestException {
 
         User currentUser = userDAO.findById(user.getId());
         currentUser.setLastName(user.getFirstName());
@@ -49,16 +48,16 @@ public class UserService {
         return userDAO.update(currentUser);
     }
 
-    public void delete(Long id) throws BadRequestException {
+    public void delete(Long id) throws InternalServerError {
         User user = userDAO.findById(id);
         userDAO.delete(id);
     }
 
-    public User findById(Long id) throws BadRequestException {
+    public User findById(Long id) throws BadRequestException, NotFoundException {
         return userDAO.findById(id);
     }
 
-    public User authorization(String email, String password) throws BadRequestException {
+    public User authorization(String email, String password) throws InternalServerError, BadRequestException {
         User user = userDAO.getUserByAuthorization(email, password);
         if (user == null)
             throw  new BadRequestException("User with email:" +email+" and password: *****  not found");

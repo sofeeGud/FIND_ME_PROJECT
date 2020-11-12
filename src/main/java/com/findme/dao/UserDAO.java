@@ -1,6 +1,6 @@
 package com.findme.dao;
 
-import com.findme.config.BadRequestException;
+import com.findme.exceptions.InternalServerError;
 import com.findme.models.User;
 import org.springframework.stereotype.Repository;
 
@@ -17,7 +17,7 @@ public class UserDAO extends GeneralDAOImpl<User> {
     }
 
 
-    public User getUserByEmailOrPhone(String email, String phone) throws BadRequestException {
+    public User getUserByEmailOrPhone(String email, String phone) throws InternalServerError {
         try {
             return entityManager.createQuery(SQL_GET_USER_BY_EMAIL_OR_PHONE, User.class)
                     .setParameter("email", email)
@@ -26,11 +26,11 @@ public class UserDAO extends GeneralDAOImpl<User> {
         } catch (NoResultException e) {
             return null;
         } catch (Exception e) {
-            throw new BadRequestException(e.getMessage());
+            throw new InternalServerError(e.getMessage());
         }
     }
 
-    public User getUserByAuthorization(String email, String password) throws BadRequestException{
+    public User getUserByAuthorization(String email, String password) throws InternalServerError {
         try {
             return entityManager.createQuery(SQL_GET_USER_BY_AUTH, User.class)
                     .setParameter("email", email)
@@ -38,8 +38,8 @@ public class UserDAO extends GeneralDAOImpl<User> {
                     .getSingleResult();
         } catch (NoResultException e) {
             return null;
-        } catch (Exception e){
-            throw new BadRequestException(e.getMessage());
+        } catch (Exception e) {
+            throw new InternalServerError(e.getMessage());
         }
     }
 }

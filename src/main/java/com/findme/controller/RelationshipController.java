@@ -1,6 +1,6 @@
 package com.findme.controller;
 
-import com.findme.config.BadRequestException;
+import com.findme.exceptions.BadRequestException;
 import com.findme.service.RelationshipService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
