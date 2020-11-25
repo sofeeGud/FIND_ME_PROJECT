@@ -33,35 +33,4 @@ public class Relationship implements Serializable {
     @Column(name = "DATE_MODIFIED")
     private Date dateModified;
 
-    public User getUserFrom() {
-        return userFrom;
-    }
-
-    public void setUserFrom(User userFrom) {
-        this.userFrom = userFrom;
-    }
-
-    public User getUserTo() {
-        return userTo;
-    }
-
-    public void setUserTo(User userTo) {
-        this.userTo = userTo;
-    }
-
-    public RelationshipStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(RelationshipStatus status) {
-        this.status = status;
-    }
-
-    public Date getDateModified() {
-        return dateModified;
-    }
-
-    public void setDateModified(Date dateModified) {
-        this.dateModified = dateModified;
-    }
 }
