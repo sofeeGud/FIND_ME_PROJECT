@@ -41,7 +41,7 @@ public class RelationshipDAO extends GeneralDAOImpl<Relationship> {
 
     public void updateRelationship(Long userFromId_old, Long userToId_old, Long userFromId_new, Long userToId_new, RelationshipStatus status) throws InternalServerError {
         try {
-            int res = entityManager.createNativeQuery(SQL_UPDATE_RELATIONSHIP)
+            entityManager.createNativeQuery(SQL_UPDATE_RELATIONSHIP)
                     .setParameter("userFromId_old", userFromId_old)
                     .setParameter("userToId_old", userToId_old)
                     .setParameter("userFromId_new", userFromId_new)
