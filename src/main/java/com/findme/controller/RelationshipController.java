@@ -23,22 +23,22 @@ public class RelationshipController {
 
     @RequestMapping(path = "/save-relationship", method = RequestMethod.POST)
     public ResponseEntity<String> requestSave(HttpSession session,
-                                              @RequestParam(required = false, name = "userId") String userId) throws BadRequestException {
-        if (session.getAttribute("loggedUserId") == null) {
+                                              @RequestParam(required=false,name="userId") String userId) throws BadRequestException {
+        if(session.getAttribute("loggedUserId")==null) {
             return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
         }
-        relationshipService.saveRelationship(session, (String) session.getAttribute("loggedUserId"), userId);
+        relationshipService.saveRelationship((String) session.getAttribute("loggedUserId"), userId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @RequestMapping(path = "/update-relationship", method = RequestMethod.POST)
     public ResponseEntity<String> requestUpdate(HttpSession session,
-                                                @RequestParam(required = false, name = "userId") String userId,
-                                                @RequestParam(required = false, name = "status") String status) throws BadRequestException {
-        if (session.getAttribute("loggedUserId") == null) {
+                                                @RequestParam(required=false,name="userId") String userId,
+                                                @RequestParam(required=false,name="status") String status) throws BadRequestException {
+        if(session.getAttribute("loggedUserId")==null) {
             return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
         }
-        relationshipService.updateRelationship(session, (String) session.getAttribute("loggedUserId"), userId, status);
+        relationshipService.updateRelationship((String) session.getAttribute("loggedUserId"), userId, status);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

@@ -9,9 +9,7 @@ import com.findme.models.RelationshipStatus;
 import com.findme.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpSession;
 
 @Service
 public class RelationshipService {
@@ -24,52 +22,51 @@ public class RelationshipService {
         this.userDAO = userDAO;
     }
 
-    public void saveRelationship(HttpSession session, String userFromId, String userToId) throws BadRequestException {
+    public void saveRelationship(String userFromId, String userToId) throws BadRequestException {
         if (userFromId != null && userToId != null) {
-            String status = userDAO.getStatusRelationship(userFromId, userToId);
-
-            if (userFromId.equals(userToId))
-                throw new BadRequestException("You cannot add yourself as a friend");
-            else if (!(String.valueOf(((User) session.getAttribute("user")).getId()).equals(userFromId)))
-                throw new BadRequestException("To add friends under this user you need to log in");
-            if (status == null)
-                relationshipDAO.saveRelationship(Long.valueOf(userFromId), Long.valueOf(userToId), RelationshipStatus.REQUESTED);
-            else if (status.equals(String.valueOf(RelationshipStatus.REQUESTED))) {
-                throw new BadRequestException("Request to this user has already been sent");
-            }
+            validateRelationshipSave(userFromId, userToId);
             relationshipDAO.saveRelationship(Long.valueOf(userFromId), Long.valueOf(userToId), RelationshipStatus.REQUESTED);
         }
     }
 
-    public void updateRelationship(HttpSession session, String userFromId, String userToId, String status) throws InternalServerError, BadRequestException {
-
+    public void updateRelationship(String userFromId, String userToId, String status) throws InternalServerError, BadRequestException {
         if (userFromId != null && userToId != null && status != null) {
-            String statusRelationship = userDAO.getStatusRelationship(userFromId, userToId);
-
-            if (!(String.valueOf(((User) session.getAttribute("user")).getId()).equals(userFromId))
-                    && !(String.valueOf(((User) session.getAttribute("user")).getId()).equals(userToId)))
-                throw new BadRequestException("You can't use this function. You need log in");
-            else if (statusRelationship == null) {
-                throw new BadRequestException("You cannot update relationship which does not exist");
-            } else if ((String.valueOf(((User) session.getAttribute("user")).getId()).equals(userFromId))
-                    && !(String.valueOf(((User) session.getAttribute("user")).getId()).equals(userToId))) {
-                if (!(statusRelationship.equals(String.valueOf(RelationshipStatus.REQUESTED))))
-                    throw new BadRequestException("You cannot update this relationship. You did not receive a request from this user or request already accepted");
-            } else if (!(String.valueOf(((User) session.getAttribute("user")).getId()).equals(userFromId))
-                    && (String.valueOf(((User) session.getAttribute("user")).getId()).equals(userToId))) {
-                if ((!(statusRelationship.equals(String.valueOf(RelationshipStatus.REQUESTED)))))
-                    throw new BadRequestException("You cannot update this relationship. You did not receive a request from this user");
-
-            } else if (!(String.valueOf(((User) session.getAttribute("user")).getId()).equals(userFromId))
-                    && (String.valueOf(((User) session.getAttribute("user")).getId()).equals(userToId))) {
-                if (((statusRelationship.equals(String.valueOf(RelationshipStatus.FRIENDS)))))
-                    throw new BadRequestException("You cannot update this relationship. You already friends");
-
-            }
             Relationship currentRelationship = relationshipDAO.getRelationship(userFromId, userToId);
+            validateRelationshipUpdate(currentRelationship, userFromId, userToId, status);
             relationshipDAO.updateRelationship(
                     currentRelationship.getUserFrom().getId(), currentRelationship.getUserTo().getId(),
                     Long.valueOf(userFromId), Long.valueOf(userToId), RelationshipStatus.valueOf(status));
         }
+    }
+    private void validateRelationshipUpdate(Relationship currentRelationship, String userFromId, String userToId, String status) throws BadRequestException {
+
+        User userTo = userDAO.findById(Long.valueOf(userToId));
+        if (userTo == null || currentRelationship == null)
+            throw new BadRequestException("Relationship from user " + userFromId + " to user " + userToId + " save - failed. Wrong data.");
+        if (userFromId.equals(userToId))
+            throw new BadRequestException("You cannot send a request to yourself");
+        if (currentRelationship != null && status != null) {
+            if (currentRelationship.equals(RelationshipStatus.FRIENDS) && status.equals(RelationshipStatus.FRIENDS))
+                throw new BadRequestException("You and user " + userTo.getFirstName() + " are already friends");
+            if (currentRelationship.equals(RelationshipStatus.DELETED) && status.equals(RelationshipStatus.FRIENDS))
+                throw new BadRequestException("You cannot delete a user who is not your friend yet");
+            if (currentRelationship.equals(RelationshipStatus.REQUESTED) && status.equals(RelationshipStatus.DELETED))
+                throw new BadRequestException("To remove a user " + userTo.getFirstName() + " from friends, first accept the request");
+            if (currentRelationship.equals(RelationshipStatus.CANCELED) && status.equals(RelationshipStatus.FRIENDS))
+                throw new BadRequestException("User " + userTo.getFirstName() + " canceled the friend request");
+            if (currentRelationship.equals(RelationshipStatus.REJECTED) && status.equals(RelationshipStatus.FRIENDS))
+                throw new BadRequestException("The friend request has already been rejected");
+            if (currentRelationship.equals(RelationshipStatus.DELETED) && status.equals(RelationshipStatus.DELETED))
+                throw new BadRequestException("User " + userTo.getFirstName() + " has already been removed from the friends list");
+        }
+    }
+
+    private void validateRelationshipSave(String userFromId, String userToId) throws BadRequestException{
+
+        User userTo = userDAO.findById(Long.valueOf(userToId));
+        if (userFromId.equals(userToId))
+            throw new BadRequestException("You cannot send a request to yourself");
+        if (relationshipDAO.getRelationship(userFromId, userToId) != null && relationshipDAO.getRelationship(userFromId, userToId).equals(RelationshipStatus.FRIENDS))
+            throw new BadRequestException("You and user " + userTo.getFirstName() + " are already friends");
     }
 }

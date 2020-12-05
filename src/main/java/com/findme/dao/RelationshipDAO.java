@@ -1,15 +1,14 @@
 package com.findme.dao;
 
-import com.findme.exceptions.BadRequestException;
 import com.findme.exceptions.InternalServerError;
 import com.findme.models.Relationship;
 import com.findme.models.RelationshipStatus;
 import com.findme.models.User;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
+@Transactional
 @Repository
 public class RelationshipDAO extends GeneralDAOImpl<Relationship> {
     private static final String SQL_ADD_NEW_RELATIONSHIP = "INSERT INTO RELATIONSHIP(USER_FROM_ID, USER_TO_ID, STATUS) VALUES (:userFromId, :userToId, :status)";
