@@ -42,7 +42,7 @@ public class User {
     private String password;
 
     //TODO from existed data
-  //  @ManyToOne
+    //  @ManyToOne
     @Column(name = "COUNTRY")
     private String country;
 
@@ -73,14 +73,11 @@ public class User {
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @JsonIgnore
-    @OneToMany (cascade = CascadeType.ALL, mappedBy = "userFrom")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userFrom")
     private List<Message> messagesSent;
 
     @LazyCollection(LazyCollectionOption.FALSE)
     @JsonIgnore
-    @OneToMany (cascade = CascadeType.ALL, mappedBy = "userTo")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userTo")
     private List<Message> messagesReceived;
-
 }
-
-

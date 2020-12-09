@@ -3,10 +3,10 @@ package com.findme.dao;
 import com.findme.exceptions.InternalServerError;
 import com.findme.models.User;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
-
-
+@Transactional
 @Repository
 public class UserDAO extends GeneralDAOImpl<User> {
     private static final String SQL_GET_USER_BY_EMAIL_OR_PHONE = "SELECT u FROM User u WHERE email = :email OR phone = :phone";
