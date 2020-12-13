@@ -6,7 +6,7 @@ import com.findme.models.RelationshipStatus;
 import java.util.Arrays;
 
 public class RequestedStatusValidator extends AbstractRelationshipValidator {
-    private final RelationshipStatus[] CURRENT_STATUS = {RelationshipStatus.REJECTED, RelationshipStatus.DELETED, RelationshipStatus.CANCELED};
+    private final RelationshipStatus[] CURRENT_STATUS = {RelationshipStatus.REJECTED, RelationshipStatus.DELETED, RelationshipStatus.CANCELED, RelationshipStatus.FRIENDS};
     private final RelationshipStatus NEW_STATUS = RelationshipStatus.REQUESTED;
 
 
