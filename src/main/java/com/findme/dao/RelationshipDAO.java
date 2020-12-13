@@ -25,6 +25,8 @@ public class RelationshipDAO extends GeneralDAOImpl<Relationship> {
             " WHERE r.status = 'FRIENDS' AND ((r.userFrom.id = :userId AND r.userTo.id = u.id) OR (r.userTo.id = :userId AND r.userFrom.id = u.id))";
     private static final String SQL_GET_FRIENDS_COUNT = "SELECT COUNT(r) AS cnt FROM Relationship r WHERE r.status = 'FRIENDS' AND (r.userFrom.id = :userId OR r.userTo.id = :userId)";
 
+    private static final String SQL_GET_OUTGOING_REQ_COUNT = "SELECT COUNT(r) FROM Relationship r WHERE r.status = 'REQUESTED' AND r.userFrom.id = :userId";
+
     public void saveRelationship(Long userFromId, Long userToId, RelationshipStatus status) throws InternalServerError {
         try {
             int res = entityManager.createNativeQuery(SQL_ADD_NEW_RELATIONSHIP)
@@ -104,6 +106,16 @@ public class RelationshipDAO extends GeneralDAOImpl<Relationship> {
                     .getSingleResult().intValue();
         } catch (Exception e) {
             throw new InternalServerError(e.getMessage());
+        }
+    }
+
+    public int getOutgoingRequestsCount(String userId) throws InternalServerError {
+        try {
+            return entityManager.createQuery(SQL_GET_OUTGOING_REQ_COUNT, Long.class)
+                    .setParameter("userId", Long.valueOf(userId))
+                    .getSingleResult().intValue();
+        }catch (Exception e){
+            throw new InternalServerError(e.getMessage(), e.getCause());
         }
     }
 
