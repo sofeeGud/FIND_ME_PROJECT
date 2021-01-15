@@ -2,6 +2,7 @@ package com.findme.dao;
 
 
 import com.findme.exceptions.BadRequestException;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -16,6 +17,7 @@ public abstract class GeneralDAOImpl<T> implements GeneralDAO<T> {
         this.clazz = clazzToSet;
     }
 
+    @Transactional
     @Override
     public T save(T t) throws BadRequestException {
         try {

@@ -1,4 +1,4 @@
-package com.findme.validation;
+package com.findme.validation.relationship;
 
 import com.findme.models.RelationshipStatus;
 import lombok.Builder;

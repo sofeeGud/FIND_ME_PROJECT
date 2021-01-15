@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
 @Transactional
 @Repository
 public class RelationshipDAO extends GeneralDAOImpl<Relationship> {
@@ -26,6 +27,11 @@ public class RelationshipDAO extends GeneralDAOImpl<Relationship> {
     private static final String SQL_GET_FRIENDS_COUNT = "SELECT COUNT(r) AS cnt FROM Relationship r WHERE r.status = 'FRIENDS' AND (r.userFrom.id = :userId OR r.userTo.id = :userId)";
 
     private static final String SQL_GET_OUTGOING_REQ_COUNT = "SELECT COUNT(r) FROM Relationship r WHERE r.status = 'REQUESTED' AND r.userFrom.id = :userId";
+
+    private static final String SQL_GET_FRIENDS_LIST_BY_IDS = "SELECT u" +
+            " FROM User u, Relationship r" +
+            " WHERE r.status = 'FRIENDS' AND ((r.userFrom.id = :userId AND r.userTo.id = u.id) OR (r.userTo.id = :userId AND r.userFrom.id = u.id))" +
+            " AND u.id IN (:friendsIdList)";
 
     public void saveRelationship(Long userFromId, Long userToId, RelationshipStatus status) throws InternalServerError {
         try {
@@ -114,7 +120,18 @@ public class RelationshipDAO extends GeneralDAOImpl<Relationship> {
             return entityManager.createQuery(SQL_GET_OUTGOING_REQ_COUNT, Long.class)
                     .setParameter("userId", Long.valueOf(userId))
                     .getSingleResult().intValue();
-        }catch (Exception e){
+        } catch (Exception e) {
+            throw new InternalServerError(e.getMessage(), e.getCause());
+        }
+    }
+
+    public List<User> getFriendsByIdList(Long userId, List<Long> friendsIds) throws InternalServerError {
+        try {
+            return entityManager.createQuery(SQL_GET_FRIENDS_LIST_BY_IDS, User.class)
+                    .setParameter("userId", userId)
+                    .setParameter("friendsIdList", friendsIds)
+                    .getResultList();
+        } catch (Exception e) {
             throw new InternalServerError(e.getMessage(), e.getCause());
         }
     }

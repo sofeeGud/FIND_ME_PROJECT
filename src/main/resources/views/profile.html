@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
     <title>Find me</title>
     <meta charset="utf-8">
     <style>
-        body{
+        body {
             text-align: center;
             font-family: Comic Sans, cursive;
             font-size: 16px;
             color: #FFAA4D;
         }
+
         .btn {
             width: 100px;
             height: 50px;
@@ -22,12 +23,14 @@
             font-size: 16px;
 
         }
+
         .btn_mini {
             width: 75px;
             height: 35px;
             font-size: 10px;
 
         }
+
         .enter_btn {
             background: #FFAA4D;
             color: #FFFFFF;
@@ -37,13 +40,15 @@
             box-shadow: 0 2px 0 rgba(90, 97, 105, 0.11), 0 4px 8px rgba(90, 97, 105, 0.12), 0 10px 10px rgba(90, 97, 105, 0.06), 0 7px 70px rgba(90, 97, 105, 0.1);
             cursor: pointer;
         }
+
         .image {
-            background-image:url(https://ih1.redbubble.net/image.1006497309.4848/fposter,small,wall_texture,product,750x1000.u1.jpg);
-            background-position:center center;
-            width:450px;
-            height:450px;
+            background-image: url(https://ih1.redbubble.net/image.1006497309.4848/fposter,small,wall_texture,product,750x1000.u1.jpg);
+            background-position: center center;
+            width: 450px;
+            height: 450px;
             margin: 0;
         }
+
         .left {
             display: inline-block;
             width: 200px;
@@ -73,175 +78,371 @@
             font-weight: bold;
             color: #773B33;
         }
-        .container{
+
+        .container {
             position: absolute;
             margin: 0 auto;
+
+        }
+
+        input {
+            background: peachpuff;
+            width: 250px;
+            height: 40px;
+            border-radius: 20px;
+            border: 3px solid #773B33;
+            font-family: Comic Sans, cursive;
+            font-size: 18px;
+            color: #773B33;
+            padding-left: 5px;
+            padding-right: 5px;
+            outline: none;
+            text-align: center;
+            position: center;
+        }
+
+        .list-group {
+            display: flex;
+            width: 100%;
+            flex-direction: column;
+            margin: 15px;
+        }
+
+        .list-item {
+            display: flex;
+            width: 100%;
+            border-top: 2px solid;
+        }
+
+        .list-item-message {
+            width: 75%;
+            min-height: 50px;
+            align-items: center;
+            justify-content: center;
+            display: flex;
+        }
+
+        .list-item-date {
+            width: 25%;
+            min-height: 50px;
+            align-items: end;
+            justify-content: end;
+            display: flex;
 
         }
     </style>
 </head>
 <body>
 <div>
-    <a th:href="@{/logout}"><button class="btn enter_btn" style="float:right;" >Out</button></a>
+    <a th:href="@{/logout}">
+        <button class="btn enter_btn" style="float:right;">Out</button>
+    </a>
 </div>
 <div class="container" style="margin-top:80px">
     <div class="left">
         <h1>Photo</h1>
     </div>
-<!--    <div>
-        <button class="btn">Send message</button>
-    </div>-->
+    <!--    <div>
+            <button class="btn">Send message</button>
+        </div>-->
 
-<div >
-    <div class="right">
-        <div class="item" >
-            <span id="firstName" th:text="${user.firstName}"></span>&ensp; <span id="lastName" th:text="${user.lastName}"></span>
-        </div>
-        <div class="item" id="age">
-            <span class="label"> Age: </span><span th:text="${user.age}"></span>
-        </div>
-        <div class="item" id="phone">
-            <span class="label"> Phone: </span><span th:text="${user.phone}"></span>
-        </div>
-        <div class="item" id="email">
-            <span class="label"> Email: </span><span th:text="${user.email}"></span>
-        </div>
-        <div class="item" id="country">
-            <span class="label"> Country: </span><span th:text="${user.country}"></span>
-        </div>
-        <div class="item" id="city">
-            <span class="label"> City: </span><span th:text="${user.city}"></span>
-        </div>
-        <div style="padding: 10px;">Status: <span th:text="${loggedUser.getId() == user.id ? 'Me' : (relStatus != null ? relStatus.name() : 'undefined')}">somebody</span></div>
-        <div id="relationship-status">
-            <div th:if="${loggedUser.getId() == user.id}">
-                <button class="btn enter_btn" th:if="${incomingRequests.size() > 0}">
-                    Incoming requests
-                    <span th:text="${incomingRequests.size()}">0</span>
-                </button>
-                <ul id="incomingReq" >
-                    <li th:each="usr : ${incomingRequests}" th:id="'incomingReq-' + ${usr.getId()}">
-                        <div>
-                            <span th:text="${usr.firstName}+' '+${usr.lastName}"></span>
-                        <button class="btn btn_mini" th:onclick="|requestUpdate('${usr.getId()}','REJECTED')|">
-                            Rejected
-                        </button>
-                        <button class="btn btn_mini enter_btn" id="accept" th:onclick="|requestUpdate('${usr.getId()}','FRIENDS')|">
-                            Add
-                        </button><br>
-                        </div>
-                    </li>
-                </ul>
+    <div>
+        <div class="right">
+            <div class="item">
+                <span id="firstName" th:text="${user.firstName}"></span>&ensp; <span id="lastName"
+                                                                                     th:text="${user.lastName}"></span>
+            </div>
+            <div class="item" id="age">
+                <span class="label"> Age: </span><span th:text="${user.age}"></span>
+            </div>
+            <div class="item" id="phone">
+                <span class="label"> Phone: </span><span th:text="${user.phone}"></span>
+            </div>
+            <div class="item" id="email">
+                <span class="label"> Email: </span><span th:text="${user.email}"></span>
+            </div>
+            <div class="item" id="country">
+                <span class="label"> Country: </span><span th:text="${user.country}"></span>
+            </div>
+            <div class="item" id="city">
+                <span class="label"> City: </span><span th:text="${user.city}"></span>
+            </div>
+            <div style="padding: 10px;">Status: <span
+                    th:text="${loggedUser.getId() == user.id ? 'Me' : (relStatus != null ? relStatus.name() : 'undefined')}">somebody</span>
+            </div>
+            <div id="relationship-status">
+                <div th:if="${loggedUser.getId() == user.id}">
+                    <button class="btn enter_btn" th:if="${incomingRequests.size() > 0}">
+                        Incoming requests
+                        <span th:text="${incomingRequests.size()}">0</span>
+                    </button>
+                    <ul id="incomingReq">
+                        <li th:each="usr : ${incomingRequests}" th:id="'incomingReq-' + ${usr.getId()}">
+                            <div>
+                                <span th:text="${usr.firstName}+' '+${usr.lastName}"></span>
+                                <button class="btn btn_mini" th:onclick="|requestUpdate('${usr.getId()}','REJECTED')|">
+                                    Rejected
+                                </button>
+                                <button class="btn btn_mini enter_btn" id="accept"
+                                        th:onclick="|requestUpdate('${usr.getId()}','FRIENDS')|">
+                                    Add
+                                </button>
+                                <br>
+                            </div>
+                        </li>
+                    </ul>
 
 
-                <button class="btn enter_btn" th:if="${outgoingRequests.size() > 0}">
-                    Outgoing requests
-                    <span  th:text="${outgoingRequests.size()}">0</span>
-                </button>
-                <ul id="outgoingReq">
-                    <li th:each="usr : ${outgoingRequests}" th:id="'outgoingReq-' + ${usr.getId()}">
-                        <div>
-                            <span th:text="${usr.firstName}+' '+${usr.lastName}" style=""></span>
-                        <button class="btn btn_mini" th:onclick="|requestUpdate('${usr.getId()}','CANCELED')|">
-                            Canceled
-                        </button><br>
-                        </div>
-                    </li>
-                </ul>
+                    <button class="btn enter_btn" th:if="${outgoingRequests.size() > 0}">
+                        Outgoing requests
+                        <span th:text="${outgoingRequests.size()}">0</span>
+                    </button>
+                    <ul id="outgoingReq">
+                        <li th:each="usr : ${outgoingRequests}" th:id="'outgoingReq-' + ${usr.getId()}">
+                            <div>
+                                <span th:text="${usr.firstName}+' '+${usr.lastName}" style=""></span>
+                                <button class="btn btn_mini" th:onclick="|requestUpdate('${usr.getId()}','CANCELED')|">
+                                    Canceled
+                                </button>
+                                <br>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </div>
-            </div>
-        <div th:if="${loggedUser.getId() != user.id}">
-            <div th:if="${btnViewProp == 'btn-remove'}">
-                <button class="btn btn_mini" id="removeFriend" th:onclick="|requestUpdate('${user.getId()}','DELETED')|">
-                    <i ></i>Remove Friend
-                </button>
-            </div>
-            <div th:if="${btnViewProp == 'btn-sent'}">
-                <span class="label">request sent</span>
-                <button class="btn btn_mini" th:onclick="|requestUpdate('${user.getId()}','CANCELED')|" style="margin-bottom: -7px;margin-top: -7px">
-                    Canceled
-                </button>
-            </div>
-            <div th:if="${btnViewProp == 'btn-rejected'}">
-                <span class="label">request rejected</span>
-            </div>
-            <div th:if="${btnViewProp == 'btn-addUpd'}">
-                <button class="btn btn_mini enter_btn" th:onclick="|requestUpdate('${user.getId()}','REQUESTED')|">
-                    Add Friend (update)
-                </button>
-            </div>
-            <div th:if="${btnViewProp == 'btn-addSave'}">
-                <button class="btn btn_mini enter_btn" th:onclick="|requestSave('${user.getId()}')|">
-                    Add Friend (save)
-                </button>
-            </div>
-            <div th:if="${btnViewProp == 'btn-accept'}">
-                Accept request
-                <button class="btn btn_mini" th:onclick="|requestUpdate('${user.getId()}','REJECTED')|" style="margin-bottom: -7px;margin-top: -7px">
-                    Reject
-                </button>
-                <button class="btn btn_mini enter_btn" th:onclick="|requestUpdate('${user.getId()}','FRIENDS')|" style="margin-bottom: -7px;margin-top: -7px">
-                    Add
-                </button>
+            <div th:if="${loggedUser.getId() != user.id}">
+                <div th:if="${btnViewProp == 'btn-remove'}">
+                    <button class="btn btn_mini" id="removeFriend"
+                            th:onclick="|requestUpdate('${user.getId()}','DELETED')|">
+                        <i></i>Remove Friend
+                    </button>
+                </div>
+                <div th:if="${btnViewProp == 'btn-sent'}">
+                    <span class="label">request sent</span>
+                    <button class="btn btn_mini" th:onclick="|requestUpdate('${user.getId()}','CANCELED')|"
+                            style="margin-bottom: -7px;margin-top: -7px">
+                        Canceled
+                    </button>
+                </div>
+                <div th:if="${btnViewProp == 'btn-rejected'}">
+                    <span class="label">request rejected</span>
+                </div>
+                <div th:if="${btnViewProp == 'btn-addUpd'}">
+                    <button class="btn btn_mini enter_btn" th:onclick="|requestUpdate('${user.getId()}','REQUESTED')|">
+                        Add Friend (update)
+                    </button>
+                </div>
+                <div th:if="${btnViewProp == 'btn-addSave'}">
+                    <button class="btn btn_mini enter_btn" th:onclick="|requestSave('${user.getId()}')|">
+                        Add Friend (save)
+                    </button>
+                </div>
+                <div th:if="${btnViewProp == 'btn-accept'}">
+                    Accept request
+                    <button class="btn btn_mini" th:onclick="|requestUpdate('${user.getId()}','REJECTED')|"
+                            style="margin-bottom: -7px;margin-top: -7px">
+                        Reject
+                    </button>
+                    <button class="btn btn_mini enter_btn" th:onclick="|requestUpdate('${user.getId()}','FRIENDS')|"
+                            style="margin-bottom: -7px;margin-top: -7px">
+                        Add
+                    </button>
+
+                </div>
 
             </div>
-
-        </div>
-        <div th:if="${loggedUser.getId() == user.id || (relStatus != null && relStatus.name() == 'FRIENDS')}">
+            <div th:if="${loggedUser.getId() == user.id || (relStatus != null && relStatus.name() == 'FRIENDS')}">
                 <div class="label">
                     Friends
                     <span th:text="${friendsCount}">0</span>
                 </div>
-            <div th:if="${friendsList.size() > 0}">
-                <br>
-                <div th:each="user : ${friendsList}" >
-                    <a style="text-decoration:none" th:href="@{'/users/' + ${user.getId()}}">
-                        <div style="width: 100%" th:text="${user.firstName}+' '+${user.lastName}"></div>
-                    </a>
+                <div th:if="${friendsList.size() > 0}">
+                    <br>
+                    <div th:each="user : ${friendsList}">
+                        <a style="text-decoration:none" th:href="@{'/users/' + ${user.getId()}}">
+                            <div style="width: 100%" th:text="${user.firstName}+' '+${user.lastName}"></div>
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
-        <br>
-    </div>
-</div>
-
-
+            <br>
         </div>
     </div>
+
 </div>
+<div th:if="${loggedUser.getId() == user.id || (relStatus != null && relStatus.name() == 'FRIENDS')}">
+    <div class="container" style="margin-left:550px; margin-top:50px">
+        <div>
+            <input type="hidden" th:value="${user.id}" id="userPagesId">
+            <form id="save_post_form">
+                Create new post here:
+                <div>
+                    <input placeholder="Message" type="text" name="message">
+                </div>
+                <div>
+                    <input placeholder="Location" type="text" name="location">
+                </div>
+                <div id="taggedUsers">
+                    <input placeholder="Tagged friends ids (1,2,3)" id="usersTaggedIds" type="text" name="usersTaggedIds">
+                </div>
+                <button class="btn enter_btn" type="submit">Post</button>
+            </form>
+        </div>
+            <div>
+                <form id="post_filter_form">
+                    Filters:
+                    <br>
+                    <input id="ownerPosts" type="checkbox" name="ownerPosts" style="height:20px"><label  style="margin-right: 10px">Owner posts</label></br>
+                    <input id="friendsPosts" type="checkbox" name="friendsPosts" style="height:20px"><label >Friends posts</label></br>
+                    <input id="userPostedId"  placeholder="User id:" type="text" name="userPostedId" style="height:20px; width:100px">
+                </form>
+            </div>
+
+        <!-- Post list -->
+        <div id="getResultDiv">
+            <div class="list-group">
+                <!-- Туть будут посты -->
+            </div>
+            <div class="list-error">
+                <!-- Туть будут ошибки -->
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
 </div>
 <div class="image" style="float: right">
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </body>
 <script>
-function requestSave(userId) {
-$.ajax({
+    function requestSave(userId) {
+        $.ajax({
 
-type: "POST",
-url: "/save-relationship",
-data: {"userId": userId},
-success: function success() {
-window.location.reload();
-},
-error: function(xhr) {
-alert(xhr.responseText);
-}
-});
-}
+            type: "POST",
+            url: "/save-relationship",
+            data: {"userId": userId},
+            success: function success() {
+                window.location.reload();
+            },
+            error: function (xhr) {
+                alert(xhr.responseText);
+            }
+        });
+    }
 
-function requestUpdate(userId, status) {
-    $.ajax({
-        type: "POST",
-        url: "/update-relationship",
-        data: {"userId": userId, "status": status},
-        success: function success() {
-            window.location.reload();
-        },
-        error: function (xhr) {
-            alert(xhr.responseText);
-        }
+    function requestUpdate(userId, status) {
+        $.ajax({
+            type: "POST",
+            url: "/update-relationship",
+            data: {"userId": userId, "status": status},
+            success: function success() {
+                window.location.reload();
+            },
+            error: function (xhr) {
+                alert(xhr.responseText);
+            }
+        });
+    }
+
+    const form = $('#save_post_form');
+    form.submit(function (e) {
+        e.preventDefault();
+
+        const userId = document.getElementById("userPagesId").value;
+
+        $.ajax({
+            type: "POST",
+            url: `/save-post/${userId}`,
+            data: form.serialize(),
+            success: function (data) {
+                alert('Post published successfully');
+                form[0].reset();
+            },
+            error: function (xhr) {
+                if (xhr.status == 400 && xhr.responseText)
+                    alert(xhr.responseText);
+                else
+                    alert('Internal server error')
+            }
+        });
     });
-}
+
+    function postDelete(postId) {
+        if (confirm("Do you want delete this post?")) {
+            $.ajax({
+                type: "DELETE",
+                url: "/delete-post?postId=" + postId,
+                success: function success() {
+                    window.location.reload();
+                },
+                error: function (xhr) {
+                    alert(xhr.responseText);
+                }
+            });
+        }
+    }
+
+    $(document).ready(function () {
+        ajaxFilterPost();
+    })
+
+    // FILTER FORM CHANGE
+    $("#post_filter_form").change(function(e) {
+        e.preventDefault();
+        ajaxFilterPost();
+    });
+
+    function ajaxFilterPost(){
+        $('#getResultDiv .list-group').empty();
+        $('#getResultDiv .list-error').empty();
+
+        $.ajax({
+            type : "GET",
+            url : "/get-filtered-posts",
+            data : {
+                ownerPosts : $('#ownerPosts').prop('checked'),
+                friendsPosts: $('#friendsPosts').prop('checked'),
+                userPostedId: $("#userPostedId").val()
+            },
+            success : function(result) {
+                console.log('result',result)
+
+                $.each(result, function(i, post){
+                    console.log('post',post)
+
+                    const item = $('<div></div>').addClass('list-item');
+                    const message = $('<div></div>').addClass('list-item-message').text(post.message);
+                    const datePosted = $('<div></div>').addClass('list-item-date').text(new Date(post.datePosted));
+                    const location = $('<div></div>').addClass('list-item-location').text(post.location);
+
+                    let usersTargetsName = '';
+                    post.usersTagged.forEach(function (itemUT, i, arr) {
+                        usersTargetsName = usersTargetsName + itemUT.firstName + ' ' + itemUT.lastName + ',';
+                    })
+
+                    usersTargetsName = usersTargetsName.substr(0, usersTargetsName.length -1);
+
+                    const usersTagged = $('<div></div>').addClass('list-item-usersTagged').text(usersTargetsName);
+
+                    // TODO: list-item-date
+
+                    item.append(message);
+                    item.append(datePosted);
+                    item.append(location);
+                    item.append(usersTagged);
+
+
+                    $('#getResultDiv .list-group').append(item)
+                });
+            },
+            error : function(e) {
+                $("#getResultDiv .list-error").html("<strong>Error</strong>");
+                console.log("ERROR: "+ e);
+            }
+        });
+    }
+
 </script>
 </html>

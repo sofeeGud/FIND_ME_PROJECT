@@ -7,7 +7,7 @@ import com.findme.exceptions.InternalServerError;
 import com.findme.models.Relationship;
 import com.findme.models.RelationshipStatus;
 import com.findme.models.User;
-import com.findme.validation.*;
+import com.findme.validation.relationship.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
