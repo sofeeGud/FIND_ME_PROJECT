@@ -9,7 +9,6 @@ import com.findme.models.Post;
 import com.findme.models.Relationship;
 import com.findme.models.User;
 import com.findme.validation.post.AbstractPostValidator;
-import com.findme.validation.post.MessageValidator;
 import com.findme.validation.post.PostValidatorParams;
 import com.findme.validation.post.UserPagePostedValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +50,8 @@ public class PostService {
         post.setUsersTagged(usersTagged);
 
         post.setUserPagePosted(post.getUserPosted());
-        validatePost(
+        AbstractPostValidator usersValidator = new UserPagePostedValidator();
+        usersValidator.check(
                 PostValidatorParams.builder()
                         .post(post)
                         .relBtwAuthorAndPagePostedUser(relBtwAuthorAndPagePostedUser)
@@ -80,16 +80,8 @@ public class PostService {
         return postDAO.findById(id);
     }
 
-    public List<Post> getPostsByFilterOwner(Long userId, Boolean ownerPosts, Boolean friendsPosts, Long userPostedId) throws BadRequestException, InternalServerError {
-        return postDAO.getPostsByFilterOwner(userId, ownerPosts, friendsPosts, userPostedId);
+    public List<Post> getPostsByFilterOwner(Boolean ownerPosts, Boolean friendsPosts, Long userPostedId, Long userIdPage) throws BadRequestException, InternalServerError {
+        return postDAO.getPostsByFilterOwner(ownerPosts, friendsPosts, userPostedId, userIdPage);
     }
 
-    private void validatePost(PostValidatorParams params) throws BadRequestException {
-
-        AbstractPostValidator usersValidator = new UserPagePostedValidator();
-        AbstractPostValidator messageValidator = new MessageValidator();
-
-        usersValidator.setNextAbstractChainValidator(messageValidator);
-        usersValidator.check(params);
-    }
 }

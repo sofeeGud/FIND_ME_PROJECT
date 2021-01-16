@@ -19,5 +19,7 @@ public class DeletedStatusValidator extends AbstractRelationshipValidator {
             if(TimeUnit.DAYS.convert(new Date().getTime() - params.getRelationshipDateModified().getTime(), TimeUnit.MILLISECONDS) <= 3) {
                 throw new BadRequestException("Relationship validation fail. Relationship from user "+params.getUserFromId()+" to user "+params.getUserToId()+" is < 3 days");
             }
+
+            new RejectedStatusValidator().checkParam(params);
         }
 }

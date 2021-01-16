@@ -12,5 +12,6 @@ public class CanceledStatusValidator extends AbstractRelationshipValidator {
         if(params.getNewStatus().equals(NEW_STATUS) && params.getOldStatus() != CURRENT_STATUS) {
                 throw new BadRequestException("Relationship validation fail. CANCELED - Request can not be processed from user "+params.getUserFromId()+" to user "+params.getUserToId());
             }
+        new DeletedStatusValidator().checkParam(params);
     }
 }

@@ -15,7 +15,7 @@ public class PostDAO extends GeneralDAOImpl<Post> {
         setClazz(Post.class);
     }
 
-    public List<Post> getPostsByFilterOwner(Long userId, Boolean ownerPosts, Boolean friendsPosts, Long userPostedId) throws InternalServerError {
+    public List<Post> getPostsByFilterOwner(Boolean ownerPosts, Boolean friendsPosts, Long userPostedId, Long userIdPage) throws InternalServerError {
         String filters = "";
 
         if (ownerPosts != null && ownerPosts) {
@@ -35,7 +35,7 @@ public class PostDAO extends GeneralDAOImpl<Post> {
                     "WHERE p.userPagePosted.id = :userId " +
                     filters +
                     " ORDER BY p.datePosted DESC", Post.class)
-                    .setParameter("userId", userId)
+                    .setParameter("userId", userIdPage)
                     .getResultList();
         } catch (Exception e) {
             throw new InternalServerError(e.getMessage());

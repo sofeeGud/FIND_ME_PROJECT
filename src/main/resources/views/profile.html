@@ -350,8 +350,8 @@
     form.submit(function (e) {
         e.preventDefault();
 
-        const userId = document.getElementById("userPagesId").value;
 
+        const userId = document.getElementById("userPagesId").value;
         $.ajax({
             type: "POST",
             url: `/save-post/${userId}`,
@@ -398,9 +398,10 @@
         $('#getResultDiv .list-group').empty();
         $('#getResultDiv .list-error').empty();
 
+        const userId = document.getElementById("userPagesId").value;
         $.ajax({
             type : "GET",
-            url : "/get-filtered-posts",
+            url : `/get-filtered-posts/${userId}`,
             data : {
                 ownerPosts : $('#ownerPosts').prop('checked'),
                 friendsPosts: $('#friendsPosts').prop('checked'),
@@ -426,7 +427,6 @@
 
                     const usersTagged = $('<div></div>').addClass('list-item-usersTagged').text(usersTargetsName);
 
-                    // TODO: list-item-date
 
                     item.append(message);
                     item.append(datePosted);

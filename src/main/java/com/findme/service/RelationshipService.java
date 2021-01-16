@@ -47,16 +47,6 @@ public class RelationshipService {
                 throw new BadRequestException("It is not possible to send a request to yourself");
 
             AbstractRelationshipValidator friendsVal = new FriendsStatusValidator();
-            AbstractRelationshipValidator canceledVal = new CanceledStatusValidator();
-            AbstractRelationshipValidator deletedVal = new DeletedStatusValidator();
-            AbstractRelationshipValidator rejectedVal = new RejectedStatusValidator();
-            AbstractRelationshipValidator requestedVal = new RequestedStatusValidator();
-
-            friendsVal.setNextAbstractChainValidator(canceledVal);
-            canceledVal.setNextAbstractChainValidator(deletedVal);
-            deletedVal.setNextAbstractChainValidator(rejectedVal);
-            rejectedVal.setNextAbstractChainValidator(requestedVal);
-
             friendsVal.check(RelationshipValidatorParams.builder()
                     .oldStatus(currentRelationship.getStatus())
                     .newStatus(RelationshipStatus.valueOf(status))
