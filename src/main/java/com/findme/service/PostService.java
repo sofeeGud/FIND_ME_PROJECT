@@ -49,7 +49,7 @@ public class PostService {
         }
         post.setUsersTagged(usersTagged);
 
-        post.setUserPagePosted(post.getUserPosted());
+        post.setUserPagePosted(post.getUserPagePosted());
         AbstractPostValidator usersValidator = new UserPagePostedValidator();
         usersValidator.check(
                 PostValidatorParams.builder()
