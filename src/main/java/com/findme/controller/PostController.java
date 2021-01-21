@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -47,7 +46,7 @@ public class PostController {
             return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
         }
 
-        return new ResponseEntity<>(postService.getPostsByFilterOwner(ownerPosts, friendsPosts, userPostedId, Long.valueOf(userId)), HttpStatus.OK);
+        return new ResponseEntity<>(postService.getPostsByFilter(ownerPosts, friendsPosts, userPostedId, Long.valueOf(userId)), HttpStatus.OK);
     }
     @RequestMapping(path = "/delete-post", method = RequestMethod.DELETE)
     public ResponseEntity<String> deletePost(@RequestParam String postId, HttpSession session){
@@ -57,6 +56,18 @@ public class PostController {
         }
         postService.delete(Long.valueOf(postId), Long.valueOf(loggedUserId));
         return new ResponseEntity<>( HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "/get-news", method = RequestMethod.GET)
+    public ResponseEntity<?> getNewsFeed(HttpSession session,
+                                         @RequestParam int maxResult,
+                                         @RequestParam int currentListPart){
+        String loggedUserId = (String) session.getAttribute("loggedUserId");
+        if(loggedUserId==null) {
+            return new ResponseEntity<>("You are not logged in to see this information.", HttpStatus.FORBIDDEN);
+        }
+        List<Post> list = postService.getNews(Long.valueOf(loggedUserId), maxResult, currentListPart);
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
 }

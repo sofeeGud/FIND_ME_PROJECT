@@ -35,7 +35,6 @@ public class PostService {
 
     public Post save(Post post, String usersTaggedIds) throws InternalServerError, BadRequestException {
         post.setDatePosted(new Date());
-        User userPosted = userDAO.findById(post.getUserPosted().getId());
         Relationship relBtwAuthorAndPagePostedUser = relationshipDAO.getRelationship(post.getUserPosted().getId().toString(), post.getUserPagePosted().getId().toString());
         List<User> usersTagged = new ArrayList<>();
         String[] usersTaggedId =  usersTaggedIds.split(",");
@@ -80,8 +79,13 @@ public class PostService {
         return postDAO.findById(id);
     }
 
-    public List<Post> getPostsByFilterOwner(Boolean ownerPosts, Boolean friendsPosts, Long userPostedId, Long userIdPage) throws BadRequestException, InternalServerError {
-        return postDAO.getPostsByFilterOwner(ownerPosts, friendsPosts, userPostedId, userIdPage);
+    public List<Post> getPostsByFilter(Boolean ownerPosts, Boolean friendsPosts, Long userPostedId, Long userIdPage) throws BadRequestException, InternalServerError {
+        return postDAO.getPostsByFilter(ownerPosts, friendsPosts, userPostedId, userIdPage);
     }
 
+
+    public List<Post> getNews(Long userId, int maxResults, int currentListPart) throws InternalServerError {
+        int rowsFrom = currentListPart == 1 ? 0 : currentListPart*maxResults-maxResults;
+        return postDAO.getPostsNews(userId, rowsFrom, maxResults);
+    }
 }

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>Find me</title>
+    <meta charset="utf-8">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Comic Sans, cursive;
+            font-size: 16px;
+            color: #FFAA4D;
+        }
+
+        .header {
+            display: flex;
+            width: 100%;
+            padding: 15px;
+        }
+
+        .spacer {
+            width: 1px;
+            flex-grow: 1;
+        }
+        .btn {
+            width: 100px;
+            height: 50px;
+            border: 0;
+            border-radius: 20px;
+            transition: .15s;
+            margin: 12px auto;
+            outline: none;
+            font-family: Comic Sans, cursive;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+        }
+
+        .btn_mini {
+            width: 75px;
+            height: 35px;
+            font-size: 10px;
+
+        }
+
+        .enter_btn {
+            background: #FFAA4D;
+            color: #FFFFFF;
+        }
+
+        .out_btn {
+            background: #FFAA4D;
+            color: #FFFFFF;
+        }
+
+        .btn:hover {
+            box-shadow: 0 2px 0 rgba(90, 97, 105, 0.11), 0 4px 8px rgba(90, 97, 105, 0.12), 0 10px 10px rgba(90, 97, 105, 0.06), 0 7px 70px rgba(90, 97, 105, 0.1);
+            cursor: pointer;
+        }
+
+        .image {
+            background-image: url(https://ih1.redbubble.net/image.1006497309.4848/fposter,small,wall_texture,product,750x1000.u1.jpg);
+            background-position: center center;
+            width: 450px;
+            height: 450px;
+            margin: 0;
+        }
+
+        .left {
+            display: inline-block;
+            width: 300px;
+            box-shadow: 0 2px 0 rgba(90, 97, 105, 0.11), 0 4px 8px rgba(90, 97, 105, 0.12), 0 10px 10px rgba(90, 97, 105, 0.06), 0 7px 70px rgba(90, 97, 105, 0.1);
+            border-radius: 15px;
+            margin-left: 15px;
+            margin-right: 15px;
+            padding: 15px;
+            text-align: center;
+            flex-flow: column;
+        }
+
+        .right {
+            width: 100%;
+            height: 800px;
+            text-align: center;
+            box-shadow: 0 2px 0 rgba(90, 97, 105, 0.11), 0 4px 8px rgba(90, 97, 105, 0.12), 0 10px 10px rgba(90, 97, 105, 0.06), 0 7px 70px rgba(90, 97, 105, 0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            display: inline-block;
+            margin-left: 15px;
+            margin-right: 15px;
+            padding: 15px;
+            flex-flow: column;
+
+        }
+
+        .item {
+            margin: 15px;
+        }
+
+        .label {
+            font-size: 18px;
+            font-weight: bold;
+            color: #773B33;
+        }
+
+        .container {
+            margin: 0 auto;
+            display: flex;
+        }
+
+        input {
+            background: peachpuff;
+            width: 250px;
+            height: 40px;
+            border-radius: 20px;
+            border: 3px solid #773B33;
+            font-family: Comic Sans, cursive;
+            font-size: 18px;
+            color: #773B33;
+            padding-left: 5px;
+            padding-right: 5px;
+            outline: none;
+            text-align: center;
+            position: center;
+        }
+
+        .list-group {
+            display: flex;
+            width: 100%;
+            flex-direction: column;
+            margin: 15px;
+        }
+
+        .list-item {
+            display: flex;
+            width: 100%;
+            border-top: 2px solid;
+        }
+
+        .list-item-message {
+            width: 75%;
+            min-height: 50px;
+            align-items: center;
+            justify-content: center;
+            display: flex;
+        }
+
+        .list-item-date {
+            width: 25%;
+            min-height: 50px;
+            align-items: end;
+            justify-content: end;
+            display: flex;
+
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <div class="spacer"></div>
+    <a class="btn out_btn" th:href="@{'/user/' + ${loggedUser.getId()}}">Profile</a>
+    <a class="btn out_btn" th:href="@{/logout}">Out</a>
+</div>
+<div class="container">
+
+                <div>
+                    <form id="newsFilterForm">
+                        <label for="resultsOnPage" class="w3-opacity inline">Results: </label>
+                        <select id="resultsOnPage" name="results" style="width: 50px; margin-left: 10px">
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="30">30</option>
+                        </select>
+                    </form>
+                </div>
+    <!-- Post list -->
+    <div id="getResultDiv">
+        <div class="list-group">
+        </div>
+        <br>
+        <button id="loadMore">More</button>
+    </div>
+
+</div>
+<div class="image" style="float: right">
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</body>
+<script>
+    let currentListPart = 1;
+
+    $(document).ready ( function(){
+        ajaxGetNews();
+    });
+
+    $('#newsFilterForm').change(function(event) {
+        event.preventDefault();
+        $('#getResultDiv div').empty();
+        currentListPart = 1;
+        ajaxGetNews();
+    });
+
+    $('#loadMore').click(function(event) {
+        currentListPart++;
+        event.preventDefault();
+        ajaxGetNews();
+    });
+
+
+    function ajaxGetNews(){
+        // DO GET
+        $.ajax({
+            type : "GET",
+            url : "/get-news",
+            data: {
+                maxResult: $("#resultsOnPage option:selected").text(),
+                currentListPart: currentListPart
+            },
+            success : function(result) {
+
+                $.each(result, function(i, post){
+                    console.log('post',post)
+
+                    const item = $('<div></div>').addClass('list-item');
+                    const message = $('<div></div>').addClass('list-item-message').text(post.message);
+                    const datePosted = $('<div></div>').addClass('list-item-date').text(new Date(post.datePosted));
+                    const location = $('<div></div>').addClass('list-item-location').text(post.location);
+
+                    let usersTargetsName = '';
+                    post.usersTagged.forEach(function (itemUT, i, arr) {
+                        usersTargetsName = usersTargetsName + itemUT.firstName + ' ' + itemUT.lastName + ',';
+                    })
+
+                    usersTargetsName = usersTargetsName.substr(0, usersTargetsName.length -1);
+
+                    const usersTagged = $('<div></div>').addClass('list-item-usersTagged').text(usersTargetsName);
+
+
+                    item.append(message);
+                    item.append(datePosted);
+                    item.append(location);
+                    item.append(usersTagged);
+
+
+                    $('#getResultDiv .list-group').append(item)
+                });
+            },
+            error : function(e) {
+                $('#getResultDiv').html("<div class=\"w3-container w3-white w3-margin\">Error</div>");
+                console.log("ERROR: "+ e);
+            }
+        });
+    }
+</script>
+</html>

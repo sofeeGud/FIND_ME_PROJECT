@@ -10,12 +10,22 @@ import java.util.List;
 @Transactional
 @Repository
 public class PostDAO extends GeneralDAOImpl<Post> {
+    private static final String GET_SQL_NEWS = "SELECT p " +
+            " FROM Post p " +
+            " LEFT JOIN Relationship r ON (r.userFrom.id = :userId AND r.userTo.id = p.userPosted.id) OR (r.userTo.id = :userId AND r.userFrom.id = p.userPosted.id)" +
+            "WHERE r.status = 'FRIENDS' " +
+            " ORDER BY p.datePosted DESC";
+
+    private static final String GET_SQL_NEWS_COUNT = "SELECT COUNT(*) " +
+            " FROM Post p " +
+            " LEFT JOIN Relationship r ON (r.userFrom.id = :userId AND r.userTo.id = p.userPosted.id) OR (r.userTo.id = :userId AND r.userFrom.id = p.userPosted.id)" +
+            "WHERE r.status = 'FRIENDS' ";
 
     public PostDAO() {
         setClazz(Post.class);
     }
 
-    public List<Post> getPostsByFilterOwner(Boolean ownerPosts, Boolean friendsPosts, Long userPostedId, Long userIdPage) throws InternalServerError {
+    public List<Post> getPostsByFilter(Boolean ownerPosts, Boolean friendsPosts, Long userPostedId, Long userIdPage) throws InternalServerError {
         String filters = "";
 
         if (ownerPosts != null && ownerPosts) {
@@ -32,7 +42,7 @@ public class PostDAO extends GeneralDAOImpl<Post> {
             return entityManager.createQuery("SELECT p" +
                     " FROM Post p " +
                     " LEFT JOIN Relationship r ON (r.userFrom.id = :userId AND r.userTo.id = p.userPosted.id) OR (r.userTo.id = :userId AND r.userFrom.id = p.userPosted.id)" +
-                    "WHERE p.userPagePosted.id = :userId " +
+                    "WHERE r.status = 'FRIENDS'" +
                     filters +
                     " ORDER BY p.datePosted DESC", Post.class)
                     .setParameter("userId", userIdPage)
@@ -41,4 +51,19 @@ public class PostDAO extends GeneralDAOImpl<Post> {
             throw new InternalServerError(e.getMessage());
         }
     }
+
+
+    public List<Post> getPostsNews(Long userId, int rowsFrom, int maxResults) throws InternalServerError {
+        try {
+
+            return entityManager.createQuery(GET_SQL_NEWS, Post.class)
+                    .setParameter("userId", userId)
+                    .setFirstResult(rowsFrom)
+                    .setMaxResults(maxResults)
+                    .getResultList();
+        } catch (Exception e) {
+            throw new InternalServerError(e.getMessage());
+        }
+    }
+
 }
