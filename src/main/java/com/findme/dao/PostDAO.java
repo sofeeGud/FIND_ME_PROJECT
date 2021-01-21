@@ -16,10 +16,6 @@ public class PostDAO extends GeneralDAOImpl<Post> {
             "WHERE r.status = 'FRIENDS' " +
             " ORDER BY p.datePosted DESC";
 
-    private static final String GET_SQL_NEWS_COUNT = "SELECT COUNT(*) " +
-            " FROM Post p " +
-            " LEFT JOIN Relationship r ON (r.userFrom.id = :userId AND r.userTo.id = p.userPosted.id) OR (r.userTo.id = :userId AND r.userFrom.id = p.userPosted.id)" +
-            "WHERE r.status = 'FRIENDS' ";
 
     public PostDAO() {
         setClazz(Post.class);
