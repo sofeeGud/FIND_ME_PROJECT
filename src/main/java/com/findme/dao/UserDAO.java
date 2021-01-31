@@ -2,10 +2,13 @@ package com.findme.dao;
 
 import com.findme.exceptions.InternalServerError;
 import com.findme.models.User;
+import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
+
+@Log4j
 @Transactional
 @Repository
 public class UserDAO extends GeneralDAOImpl<User> {
@@ -27,6 +30,7 @@ public class UserDAO extends GeneralDAOImpl<User> {
         } catch (NoResultException e) {
             return null;
         } catch (Exception e) {
+            log.error(e.getMessage(), e);
             throw new InternalServerError(e.getMessage());
         }
     }
@@ -40,6 +44,7 @@ public class UserDAO extends GeneralDAOImpl<User> {
         } catch (NoResultException e) {
             return null;
         } catch (Exception e) {
+            log.error(e.getMessage(), e);
             throw new InternalServerError(e.getMessage());
         }
     }
@@ -52,6 +57,7 @@ public class UserDAO extends GeneralDAOImpl<User> {
         } catch (NoResultException e) {
             return null;
         } catch (Exception e) {
+            log.error(e.getMessage(), e);
             throw new InternalServerError(e.getMessage());
         }
     }

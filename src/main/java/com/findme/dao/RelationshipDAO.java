@@ -4,11 +4,13 @@ import com.findme.exceptions.InternalServerError;
 import com.findme.models.Relationship;
 import com.findme.models.RelationshipStatus;
 import com.findme.models.User;
+import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Log4j
 @Transactional
 @Repository
 public class RelationshipDAO extends GeneralDAOImpl<Relationship> {
@@ -34,6 +36,7 @@ public class RelationshipDAO extends GeneralDAOImpl<Relationship> {
             " AND u.id IN (:friendsIdList)";
 
     public void saveRelationship(Long userFromId, Long userToId, RelationshipStatus status) throws InternalServerError {
+        log.info("Save new relationship from user " + userFromId + " to user " + userToId);
         try {
             int res = entityManager.createNativeQuery(SQL_ADD_NEW_RELATIONSHIP)
                     .setParameter("userFromId", userFromId)
@@ -47,6 +50,7 @@ public class RelationshipDAO extends GeneralDAOImpl<Relationship> {
     }
 
     public void updateRelationship(Long userFromId_old, Long userToId_old, Long userFromId_new, Long userToId_new, RelationshipStatus status) throws InternalServerError {
+        log.info("Update relationship from user " + userFromId_old + " " + userFromId_new + " to user " + userToId_old + " " + userToId_new + " with status " + status);
         try {
             entityManager.createNativeQuery(SQL_UPDATE_RELATIONSHIP)
                     .setParameter("userFromId_old", userFromId_old)
@@ -56,6 +60,7 @@ public class RelationshipDAO extends GeneralDAOImpl<Relationship> {
                     .setParameter("status", status.toString())
                     .executeUpdate();
         } catch (Exception e) {
+            log.error(e.getMessage(), e);
             throw new InternalServerError(e.getMessage());
         }
     }
@@ -71,6 +76,7 @@ public class RelationshipDAO extends GeneralDAOImpl<Relationship> {
                 result = resultList.get(0);
             return result;
         } catch (Exception e) {
+            log.error(e.getMessage(), e);
             throw new InternalServerError(e.getMessage());
         }
     }
@@ -81,6 +87,7 @@ public class RelationshipDAO extends GeneralDAOImpl<Relationship> {
                     .setParameter("userId", Long.valueOf(userId))
                     .getResultList();
         } catch (Exception e) {
+            log.error(e.getMessage(), e);
             throw new InternalServerError(e.getMessage());
         }
     }
@@ -91,6 +98,7 @@ public class RelationshipDAO extends GeneralDAOImpl<Relationship> {
                     .setParameter("userId", Long.valueOf(userId))
                     .getResultList();
         } catch (Exception e) {
+            log.error(e.getMessage(), e);
             throw new InternalServerError(e.getMessage());
         }
     }
@@ -101,6 +109,7 @@ public class RelationshipDAO extends GeneralDAOImpl<Relationship> {
                     .setParameter("userId", Long.valueOf(userId))
                     .getResultList();
         } catch (Exception e) {
+            log.error(e.getMessage(), e);
             throw new InternalServerError(e.getMessage());
         }
     }
@@ -111,6 +120,7 @@ public class RelationshipDAO extends GeneralDAOImpl<Relationship> {
                     .setParameter("userId", Long.valueOf(userId))
                     .getSingleResult().intValue();
         } catch (Exception e) {
+            log.error(e.getMessage(), e);
             throw new InternalServerError(e.getMessage());
         }
     }
@@ -121,6 +131,7 @@ public class RelationshipDAO extends GeneralDAOImpl<Relationship> {
                     .setParameter("userId", Long.valueOf(userId))
                     .getSingleResult().intValue();
         } catch (Exception e) {
+            log.error(e.getMessage(), e);
             throw new InternalServerError(e.getMessage(), e.getCause());
         }
     }
@@ -132,6 +143,7 @@ public class RelationshipDAO extends GeneralDAOImpl<Relationship> {
                     .setParameter("friendsIdList", friendsIds)
                     .getResultList();
         } catch (Exception e) {
+            log.error(e.getMessage(), e);
             throw new InternalServerError(e.getMessage(), e.getCause());
         }
     }

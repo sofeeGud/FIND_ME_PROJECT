@@ -2,11 +2,12 @@ package com.findme.dao;
 
 import com.findme.exceptions.InternalServerError;
 import com.findme.models.Post;
+import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
+@Log4j
 @Transactional
 @Repository
 public class PostDAO extends GeneralDAOImpl<Post> {
@@ -44,6 +45,7 @@ public class PostDAO extends GeneralDAOImpl<Post> {
                     .setParameter("userId", userIdPage)
                     .getResultList();
         } catch (Exception e) {
+            log.error(e.getMessage(), e);
             throw new InternalServerError(e.getMessage());
         }
     }
@@ -58,6 +60,7 @@ public class PostDAO extends GeneralDAOImpl<Post> {
                     .setMaxResults(maxResults)
                     .getResultList();
         } catch (Exception e) {
+            log.error(e.getMessage(), e);
             throw new InternalServerError(e.getMessage());
         }
     }

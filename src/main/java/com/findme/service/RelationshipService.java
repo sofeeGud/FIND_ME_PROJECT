@@ -8,11 +8,12 @@ import com.findme.models.Relationship;
 import com.findme.models.RelationshipStatus;
 import com.findme.models.User;
 import com.findme.validation.relationship.*;
+import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
-
+@Log4j
 @Service
 public class RelationshipService {
     private RelationshipDAO relationshipDAO;
@@ -41,10 +42,14 @@ public class RelationshipService {
         if (userFromId != null && userToId != null && status != null) {
 
             User userTo = userDAO.findById(Long.valueOf(userToId));
-            if (userTo == null || currentRelationship == null)
+            if (userTo == null || currentRelationship == null) {
+                log.warn("Relationship from user " + userFromId + " to user " + userToId + " save - failed. Wrong data.");
                 throw new BadRequestException("Relationship from user " + userFromId + " to user " + userToId + " save - failed. Wrong data.");
-            if (userFromId.equals(userToId))
+            }
+            if (userFromId.equals(userToId)) {
+                log.warn("It is not possible to send a request to yourself");
                 throw new BadRequestException("It is not possible to send a request to yourself");
+            }
 
             AbstractRelationshipValidator friendsVal = new FriendsStatusValidator();
             friendsVal.check(RelationshipValidatorParams.builder()
@@ -62,10 +67,14 @@ public class RelationshipService {
     private void validateRelationshipSave(String userFromId, String userToId) throws BadRequestException, InternalServerError {
         if (userFromId != null && userToId != null) {
 
-            if (relationshipDAO.getRelationship(userFromId, userToId) != null)
+            if (relationshipDAO.getRelationship(userFromId, userToId) != null) {
+                log.warn("Relationship from user " + userFromId + " to user " + userToId + " save - failed. There is an active relationship");
                 throw new BadRequestException("Relationship from user " + userFromId + " to user " + userToId + " save - failed. There is an active relationship");
-            if (userFromId.equals(userToId))
+            }
+            if (userFromId.equals(userToId)) {
+                log.warn("It is not possible to send a request to yourself");
                 throw new BadRequestException("It is not possible to send a request to yourself");
+            }
 
             AbstractRelationshipValidator requestedVal = new RequestedStatusValidator();
             requestedVal.check(RelationshipValidatorParams.builder()

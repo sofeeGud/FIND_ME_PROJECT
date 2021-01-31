@@ -11,6 +11,7 @@ import com.findme.models.User;
 import com.findme.validation.post.AbstractPostValidator;
 import com.findme.validation.post.PostValidatorParams;
 import com.findme.validation.post.UserPagePostedValidator;
+import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Log4j
 @Service
 public class PostService {
     private PostDAO postDAO;
@@ -37,9 +39,9 @@ public class PostService {
         post.setDatePosted(new Date());
         Relationship relBtwAuthorAndPagePostedUser = relationshipDAO.getRelationship(post.getUserPosted().getId().toString(), post.getUserPagePosted().getId().toString());
         List<User> usersTagged = new ArrayList<>();
-        String[] usersTaggedId =  usersTaggedIds.split(",");
-        for (String id : usersTaggedId){
-            if (id != null && Long.parseLong(id)>0) {
+        String[] usersTaggedId = usersTaggedIds.split(",");
+        for (String id : usersTaggedId) {
+            if (id != null && Long.parseLong(id) > 0) {
                 User user = userDAO.findById(Long.valueOf(id));
                 if (user != null) {
                     usersTagged.add(user);
@@ -67,9 +69,11 @@ public class PostService {
     public void delete(Long id, Long userId) throws InternalServerError, BadRequestException {
         Post post = postDAO.findById(id);
         if (post == null) {
+            log.warn("Post delete fail. Wrong post id " + id);
             throw new BadRequestException("Wrong post id");
         }
         if (!post.getUserPosted().getId().equals(userId)) {
+            log.warn("Post delete fail. User " + userId + " can not remove post " + id);
             throw new BadRequestException("You can not remove this post");
         }
         postDAO.delete(id);
@@ -85,7 +89,7 @@ public class PostService {
 
 
     public List<Post> getNews(Long userId, int maxResults, int currentListPart) throws InternalServerError {
-        int rowsFrom = currentListPart == 1 ? 0 : currentListPart*maxResults-maxResults;
+        int rowsFrom = currentListPart == 1 ? 0 : currentListPart * maxResults - maxResults;
         return postDAO.getPostsNews(userId, rowsFrom, maxResults);
     }
 }

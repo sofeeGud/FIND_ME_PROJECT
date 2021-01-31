@@ -5,11 +5,14 @@ import com.findme.dao.UserDAO;
 import com.findme.exceptions.InternalServerError;
 import com.findme.exceptions.NotFoundException;
 import com.findme.models.User;
+import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.Date;
+
+@Log4j
 @Service
 public class UserService {
 
@@ -23,6 +26,7 @@ public class UserService {
 
     public User save(User user) throws InternalServerError, BadRequestException {
         if (userDAO.getUserByEmailOrPhone(user.getEmail(), user.getPhone()) != null) {
+            log.warn("There is already registered user with this email " + user.getEmail() + " or phone " + user.getPhone());
             throw new BadRequestException("There is already registered user with this email or phone");
         }
         user.setDateRegistered(new Date());
@@ -57,8 +61,10 @@ public class UserService {
 
     public User authorization(String email, String password) throws InternalServerError, BadRequestException {
         User user = userDAO.getUserByAuthorization(email, password);
-        if (user == null)
-            throw  new BadRequestException("User with email:" +email+" and password: *****  not found");
+        if (user == null) {
+            log.warn("Login fail for email " + email);
+            throw new BadRequestException("User with email:" + email + " and password: *****  not found");
+        }
         return user;
     }
 
