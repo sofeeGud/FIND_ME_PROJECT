@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>Find me</title>
+    <meta charset="utf-8">
+    <style>
+        .dialogs-list-group{
+            list-style-type: none; padding: 0 0 0 0; margin: 0 0 0 0;
+        }
+        .msg-button{
+            /*background-color: rgba(210, 221, 224, 0.1);*/
+            cursor: pointer;
+            padding: 2px 0 !important;
+            margin: unset !important;
+            height: 60px;
+
+
+        }
+        .msg-button:hover{
+            background-color: rgba(139, 149, 152, 0.29);
+        }
+        .msg-user-name {
+            font-size: 18px!important;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .msg-date-block {
+            padding-right: 6px;
+            float: right;
+            font-size: 12px!important;
+            color: #0c5c81;
+        }
+        .msg-approve-icon {
+            font-size: 12px!important;
+            color: #3a9e48;
+            float: left;
+            margin-top: 3px;
+        }
+        .msg-preview {
+            font-size: 12px!important;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .msg-active-element {
+            background-color: rgba(81, 131, 183, 0.3)
+        }
+
+        .message {
+            color: #484848;
+            width: 70%;
+            padding: 5px 60px 5px 15px;
+            word-wrap: break-word;
+        }
+
+        .message-from {
+            background-color: rgba(12,99,148,0.06);
+            margin: 15px 5px 0 5px;
+            border-radius: 5px 30px 30px 30px;
+        }
+
+        .message-to {
+            background-color: rgba(16,143,57,0.13);
+            margin: 15px 15px 5px auto;
+            border-radius: 30px 30px 5px 30px;
+        }
+
+        .message-right-block {
+            float: right;
+            margin-right: -45px;
+            font-size: small
+        }
+
+
+
+        .msg-time {
+            margin-top: 5px;
+            color: #7f7f7f;
+        }
+        .msg-appr {
+            font-size: 12px!important;
+            color: #3a9e48;
+            padding-right: 40px;
+            padding-top: 9px;
+        }
+
+
+        .buttons {
+            margin-top: 30px;
+            color: rgba(110,110,110,0.73);
+        }
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Comic Sans, cursive;
+            font-size: 16px;
+            color: #FFAA4D;
+        }
+
+        .header {
+            display: flex;
+            width: 100%;
+            padding: 15px;
+        }
+
+        .spacer {
+            width: 1px;
+            flex-grow: 1;
+        }
+        .btn {
+            width: 100px;
+            height: 50px;
+            border: 0;
+            border-radius: 20px;
+            transition: .15s;
+            outline: none;
+            font-family: Comic Sans, cursive;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+        }
+
+        .enter_btn {
+            background: #FFAA4D;
+            color: #FFFFFF;
+        }
+
+        .out_btn {
+            background: #FFAA4D;
+            color: #FFFFFF;
+        }
+
+        .btn:hover {
+            box-shadow: 0 2px 0 rgba(90, 97, 105, 0.11), 0 4px 8px rgba(90, 97, 105, 0.12), 0 10px 10px rgba(90, 97, 105, 0.06), 0 7px 70px rgba(90, 97, 105, 0.1);
+            cursor: pointer;
+        }
+
+        input {
+            background: peachpuff;
+            width: 250px;
+            height: 40px;
+            border-radius: 20px;
+            border: 3px solid #773B33;
+            font-family: Comic Sans, cursive;
+            font-size: 18px;
+            color: #773B33;
+            padding-left: 5px;
+            padding-right: 5px;
+            outline: none;
+            text-align: center;
+            position: center;
+        }
+
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <div class="spacer"></div>
+    <a th:href="@{/feed}">
+        <button class="btn enter_btn" style="float:right;">News</button>
+    </a>
+    <a class="btn out_btn" th:href="@{/logout}">Out</a>
+</div>
+<div class="" style="margin-top:80px">
+    <div class="">
+        <div class="">
+            <ul class="dialogs-list-group" style="max-height: 600px; overflow-y:scroll">
+                <div id="getDialogsDiv">
+                    <ul class="dialogs-list-group">
+                    </ul>
+                </div>
+            </ul>
+            <br>
+        </div>
+        <div class="">
+            <div class="">
+                <div class="">
+                    <div class="">
+                            <div id="getMessagesDiv">
+                                <div class="messages-list-group">
+
+                            </div>
+                        </div>
+                        <form id="messageSendFrom">
+                            <label for="id"></label><input class="" id="id" type="text" name="id">
+                            <label for="userFromId"></label><input th:value="${loggedUserId}" class="" id="userFromId" type="text" name="userFromId">
+                            <label for="userToId"></label><input class="" id="userToId" type="text" name="userToId">
+                            <label for="text">
+                                <textarea rows="4" cols="50" id="text" name="text" style="height: 100px; width: 100%; border: #dddddd 1px solid; resize: vertical" required></textarea>
+                            </label>
+                            <div style="height: 50px">
+                                <button type="reset" class="btn reg_btn" style="left: 0; margin-top: 5px; width: 80px">Cancel</button>
+                                <button id="submitBtn" type="submit" class="btn enter_btn" style="left: 0; margin-top: 5px; width: 80px">Send</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Grid -->
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</body>
+
+<script>
+    let recipientDiv;
+    let recipientId = 0;
+
+    $(document).ready ( function(){
+        if(!parseInt(localStorage['recipientId'], 10) > 0) {
+            localStorage['recipientId'] = 0;
+        }
+        ajaxGetDialogs();
+        changeRecipient(parseInt(localStorage['recipientId'], 10));
+        // alert('ready: storId: '+localStorage['recipientId']+'recipientId: '+recipientId);
+    });
+
+    function setRecipient(id){
+        let localRecipientId = id;
+        if(localRecipientId !== null){
+            recipientId = localRecipientId;
+            localStorage['recipientId'] = localRecipientId;
+            recipientDiv = $('#user'+recipientId);
+        }
+    }
+
+    function changeRecipient(id) {
+        if($(recipientDiv).hasClass('msg-active-element'))
+            $(recipientDiv).removeClass('msg-active-element');
+
+        setRecipient(id);
+
+        $(recipientDiv).addClass('msg-active-element');
+        $('#userToId').val(recipientId);
+
+        ajaxGetMessages();
+
+    }
+
+    $("#messageSendFrom").submit(function messageSend(){
+        let jsonMessage = {
+            id: null,
+            userFrom: {
+                id: [[${loggedUserId}]]
+            },
+            userTo: {
+                id: recipientId
+            },
+            text: $('#text').val()
+        };
+
+        if($('#id').val()==='') {
+            event.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "/send-message",
+                contentType: "application/json",
+                data: JSON.stringify(jsonMessage),
+                success: function success() {
+                    $('#text').val('');
+                    ajaxGetMessages();
+                },
+                error: function (xhr) {
+                    alert(xhr.responseText);
+                }
+            });
+        } else {
+            jsonMessage.id = $('#id').val();
+
+            // let jsonMessage = {
+            //     id: $('#id').val(),
+            //     text: $('#text').val()
+            // };
+
+            $.ajax({
+                type: "PUT",
+                url: "/edit-message",
+                contentType: "application/json",
+                data: JSON.stringify(jsonMessage),
+                success: function success() {
+                    $('#text').val('');
+                    ajaxGetDialogs();
+                    ajaxGetMessages();
+                },
+                error: function(xhr) {
+                    alert(xhr.responseText);
+                }
+            });
+        }
+    });
+
+    function ajaxGetMessages(){
+        // DO GET
+        $.ajax({
+            type : "GET",
+            url : "/get-messages",
+            data: {
+                userToId: recipientId
+            },
+            success : function(result) {
+                $('#getMessagesDiv div').empty();
+                $.each(result, function(i, message){
+                    let messageInfo;
+                    if(message.userFrom.id !== recipientId){
+                        messageInfo = "<div style=\"width: 100%\">" +
+                            "              <div class=\"message message-to\">" +
+                            "                  <span>"+message.text+"</span>" +
+                            "                  <span class=\"message-right-block msg-time\">"+parseDateSent(new Date(message.dateSent))+"</span>";
+
+                        messageInfo += (message.dateRead == null) ? "<span class=\"message-right-block buttons\">" +
+                            "               <i onclick=\"messageUpdate("+message.id+",'"+message.text+"')\" class=\"\" style=\"margin-right: 2px\"></i>" +
+                            "               <i onclick=\"messageDelete("+message.id+")\" class=\"\" style=\"margin-right: 2px\"></i>" +
+                            "           </span>" : "";
+                        messageInfo += (message.dateRead != null) ? "<i class=\"msg-appr message-right-block\"></i>" : "";
+
+                        messageInfo += "</div></div>";
+                    } else {
+                        messageInfo = "<div style=\"width: 100%\">" +
+                            "              <div class=\"message message-from\">" +
+                            "                   <span>"+message.text+"</span>" +
+                            "                   <span class=\"message-right-block msg-time\">"+parseDateSent(new Date(message.dateSent))+"</span>" +
+                            "              </div>" +
+                            "          </div>";
+
+                    }
+                    $('#getMessagesDiv .messages-list-group').append(messageInfo)
+                    $('#history').scrollTop($('#history')[0].scrollHeight);
+                });
+            },
+            error : function(e) {
+                $('#getMessagesDiv').html("<div class=\"\">Error</div>");
+                console.log("ERROR: "+ e);
+            }
+        });
+    }
+
+    function ajaxGetDialogs(){
+        // DO GET
+        $.ajax({
+            type : "GET",
+            url : "/messages/get-dialogs",
+            success : function(result) {
+                $('#getDialogsDiv div').empty();
+                $.each(result, function(i, conv){
+                    let dialogs;
+                    dialogs ="<li id=\"user"+conv.userId+"\" class=\"msg-button\" onclick=\"changeRecipient("+conv.userId+")\"><div style=\"float: left;width: 60px;\">";
+                    dialogs += "</div><div style=\"margin-left: 60px;padding: 5px 0;\"><div class=\"msg-date-block\" style=\"width: 70px\">";
+                    dialogs += (conv.messageDateSent != null) ? parseDateToString(new Date(conv.messageDateSent)) : "";
+                    dialogs += "</div><div class=\"msg-user-name\" style=\"margin-right: 70px\">";
+                    dialogs += conv.userLastName+" "+conv.userFirstName;
+                    dialogs += "</div></div><div style=\"margin-left: 60px;\"><div style=\"float: right;width: 25px;padding-right: 5px\">";
+                    dialogs += (conv.userId===conv.messageUserToId && conv.messageDateRead != null) ?"<i class=\"\"></i>":"";
+                    dialogs += (conv.userId!==conv.messageUserToId && conv.newMessagesCount != null) ?"<span class=\"\">"+conv.newMessagesCount+"</span>":"";
+                    dialogs += "</div><div class=\"\" style=\"margin-right: 30px;\">";
+                    dialogs += (conv.messageText != null) ? conv.messageText : "";
+                    dialogs += "</div></div></li>";
+
+
+                    $('#getDialogsDiv .dialogs-list-group').append(dialogs)
+                });
+            },
+            error : function(e) {
+                console.log("ERROR: "+ e);
+            }
+        });
+    }
+
+    function messageDelete(id){
+        if (confirm("Do you want delete this message?")) {
+            $.ajax({
+                type: "DELETE",
+                url: "/delete-message?messageId="+id,
+                success: function success() {
+                    ajaxGetMessages();
+                },
+                error: function(xhr) {
+                    alert(xhr.responseText);
+                }
+            });
+        }
+    }
+
+    function messageUpdate(id,text){
+
+
+        $('#id').val(id);
+        $('#text').val(text);
+    }
+
+
+</script>
+</html>

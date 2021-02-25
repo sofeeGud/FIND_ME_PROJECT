@@ -44,9 +44,7 @@ public class UserController {
             model.addAttribute("error", new BadRequestException("You are not logged in to see this information."));
             return "errors/badRequest";
         }
-        User user = userService.findById(Long.valueOf(userId));
-        if (user != null) {
-            model.addAttribute("user", user);
+            model.addAttribute("user", userService.findById(Long.valueOf(userId)));
             model.addAttribute("loggedUser", session.getAttribute("loggedUser"));
             Relationship rel = relationshipDAO.getRelationship(loggedUserId, userId);
             model.addAttribute("btnViewProp", Objects.requireNonNull(getButtonsViewProperty(userId, rel)));
@@ -59,8 +57,6 @@ public class UserController {
                 model.addAttribute("outgoingRequests", relationshipDAO.getOutgoingRequests(loggedUserId));
             }
             return "profile";
-        }
-        return "errors/notFound";
     }
 
     @RequestMapping(path = "/users", method = RequestMethod.POST)
@@ -75,8 +71,6 @@ public class UserController {
     public ResponseEntity<String> login(HttpSession session, HttpServletRequest request) {
         User user = userService.authorization(request.getParameter("email"), request.getParameter("password"));
         log.info("User with id:" + user.getId() + " logged in");
-        if (user == null)
-            return new ResponseEntity<>("User with email:" + request.getParameter("email") + " and password: *****  not found", HttpStatus.BAD_REQUEST);
         session.setAttribute("loggedUser", user);
         session.setAttribute("loggedUserId", String.valueOf(user.getId()));
         return new ResponseEntity<>("redirect:/users/" + user.getId(), HttpStatus.OK);

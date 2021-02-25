@@ -162,7 +162,8 @@
 <body>
 <div class="header">
     <div class="spacer"></div>
-    <a class="btn out_btn" th:href="@{'/user/' + ${loggedUser.getId()}}">Profile</a>
+    <a class="btn out_btn" th:href="@{'/users/' + ${loggedUser.getId()}}">Profile</a>
+    <a class="btn out_btn" th:href="@{/messages}">Messages</a>
     <a class="btn out_btn" th:href="@{/logout}">Out</a>
 </div>
 <div class="container">
