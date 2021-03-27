@@ -49,6 +49,7 @@ public class UserDAO extends GeneralDAOImpl<User> {
         }
     }
 
+
     public String getStatusRelationship(String userIdFrom, String userIdTo) throws InternalServerError {
         try {
             return entityManager.createQuery(SQL_GET_RELATIONSHIP, User.class)
