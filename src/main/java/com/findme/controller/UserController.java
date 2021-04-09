@@ -44,45 +44,27 @@ public class UserController {
             model.addAttribute("error", new BadRequestException("You are not logged in to see this information."));
             return "errors/badRequest";
         }
-            model.addAttribute("user", userService.findById(Long.valueOf(userId)));
-            model.addAttribute("loggedUser", session.getAttribute("loggedUser"));
-            Relationship rel = relationshipDAO.getRelationship(loggedUserId, userId);
-            model.addAttribute("btnViewProp", Objects.requireNonNull(getButtonsViewProperty(userId, rel)));
-            model.addAttribute("friendsList", relationshipDAO.getFriendsList(userId));
-            model.addAttribute("friendsCount", relationshipDAO.getFriendsCount(userId));
-            if (rel != null)
-                model.addAttribute("relStatus", rel.getStatus());
-            if (loggedUserId.equals(userId)) {
-                model.addAttribute("incomingRequests", relationshipDAO.getIncomingRequests(loggedUserId));
-                model.addAttribute("outgoingRequests", relationshipDAO.getOutgoingRequests(loggedUserId));
-            }
-            return "profile";
+        User user = userService.findById(Long.valueOf(userId));
+        if (user == null) {
+            log.warn("User is not found");
+            model.addAttribute("error", new BadRequestException("User not found"));
+            return "errors/notFound";
+        } else
+            model.addAttribute("user", user);
+        model.addAttribute("loggedUser", session.getAttribute("loggedUser"));
+        Relationship rel = relationshipDAO.getRelationship(loggedUserId, userId);
+        model.addAttribute("btnViewProp", Objects.requireNonNull(getButtonsViewProperty(userId, rel)));
+        model.addAttribute("friendsList", relationshipDAO.getFriendsList(userId));
+        model.addAttribute("friendsCount", relationshipDAO.getFriendsCount(userId));
+        if (rel != null)
+            model.addAttribute("relStatus", rel.getStatus());
+        if (loggedUserId.equals(userId)) {
+            model.addAttribute("incomingRequests", relationshipDAO.getIncomingRequests(loggedUserId));
+            model.addAttribute("outgoingRequests", relationshipDAO.getOutgoingRequests(loggedUserId));
+        }
+        return "profile";
     }
 
-    @RequestMapping(path = "/users", method = RequestMethod.POST)
-    public ResponseEntity<String> register(@ModelAttribute User user) {
-        userService.save(user);
-        log.info("User with id:" + user.getId() + " was registered.");
-        return new ResponseEntity<>("ok", HttpStatus.OK);
-    }
-
-
-    @RequestMapping(path = "/login", method = RequestMethod.POST)
-    public ResponseEntity<String> login(HttpSession session, HttpServletRequest request) {
-        User user = userService.authorization(request.getParameter("email"), request.getParameter("password"));
-        log.info("User with id:" + user.getId() + " logged in");
-        session.setAttribute("loggedUser", user);
-        session.setAttribute("loggedUserId", String.valueOf(user.getId()));
-        return new ResponseEntity<>("redirect:/users/" + user.getId(), HttpStatus.OK);
-    }
-
-    @RequestMapping(path = "/logout", method = RequestMethod.GET)
-    public String logout(HttpSession session) {
-        session.getAttribute("loggedUserId");
-        log.info("User with id:"+session.getAttribute("loggedUserId")+" logged out");
-        session.invalidate();
-        return "redirect:/";
-    }
 
     private String getButtonsViewProperty(String userToId, Relationship rel) throws BadRequestException {
         Long userToIdL;

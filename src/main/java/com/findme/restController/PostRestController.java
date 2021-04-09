@@ -1,4 +1,4 @@
-package com.findme.controller;
+package com.findme.restController;
 
 import com.findme.models.Post;
 import com.findme.models.User;
@@ -15,12 +15,12 @@ import java.util.List;
 
 @Log4j
 @RestController
-public class PostController {
+public class PostRestController {
     private PostService postService;
     private UserService userService;
 
     @Autowired
-    public PostController(PostService postService, UserService userService) {
+    public PostRestController(PostService postService, UserService userService) {
         this.postService = postService;
         this.userService = userService;
     }
@@ -38,7 +38,10 @@ public class PostController {
 
         post.setUserPosted(UserPosted);
         post.setUserPagePosted(userPagePosted);
-        postService.save(post, usersTaggedIds);
+        if (usersTaggedIds != null && post.getMessage() != null && post.getLocation() != null) {
+            postService.save(post, usersTaggedIds);
+        } else
+            return new ResponseEntity<>("You post is empty", HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

@@ -1,4 +1,4 @@
-package com.findme.controller;
+package com.findme.restController;
 
 import com.findme.exceptions.BadRequestException;
 import com.findme.service.RelationshipService;
@@ -15,11 +15,11 @@ import javax.servlet.http.HttpSession;
 
 @Log4j
 @RestController
-public class RelationshipController {
+public class RelationshipRestController {
     private RelationshipService relationshipService;
 
     @Autowired
-    public RelationshipController(RelationshipService relationshipService) {
+    public RelationshipRestController(RelationshipService relationshipService) {
         this.relationshipService = relationshipService;
     }
 

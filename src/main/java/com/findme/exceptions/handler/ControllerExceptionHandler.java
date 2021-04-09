@@ -1,6 +1,7 @@
-package com.findme.exceptions;
+package com.findme.exceptions.handler;
 
 
+import com.findme.exceptions.BadRequestException;
 import javassist.NotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
