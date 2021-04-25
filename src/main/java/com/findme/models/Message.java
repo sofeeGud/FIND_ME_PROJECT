@@ -20,11 +20,11 @@ public class Message {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name="USER_FROM_ID", nullable = false)
+    @JoinColumn(name = "USER_FROM_ID", nullable = false)
     private User userFrom;
 
     @ManyToOne
-    @JoinColumn(name="USER_TO_ID", nullable = false)
+    @JoinColumn(name = "USER_TO_ID", nullable = false)
     private User userTo;
 
     @Column(name = "DATE_SENT")
