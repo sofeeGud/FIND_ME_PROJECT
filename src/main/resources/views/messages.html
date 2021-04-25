@@ -42,13 +42,13 @@
         }
 
         .message-from {
-            background-color: rgba(12,99,148,0.06);
+            background-color: peachpuff;
             margin: 15px 5px 0 5px;
             border-radius: 5px 30px 30px 30px;
         }
 
         .message-to {
-            background-color: rgba(16,143,57,0.13);
+            background-color: coral;
             margin: 15px 15px 5px auto;
             border-radius: 30px 30px 5px 30px;
         }
@@ -168,7 +168,7 @@
         <div class="">
             <div class="">
                 <div class="">
-                    <div class="">
+                    <div id="history" style="height: 600px; overflow-y:scroll; margin-bottom: 10px">
                             <div id="getMessagesDiv">
                                 <div class="messages-list-group">
 
@@ -259,12 +259,6 @@
             });
         } else {
             jsonMessage.id = $('#id').val();
-
-            // let jsonMessage = {
-            //     id: $('#id').val(),
-            //     text: $('#text').val()
-            // };
-
             $.ajax({
                 type: "PUT",
                 url: "/edit-message",
@@ -298,7 +292,7 @@
                         messageInfo = "<div style=\"width: 100%\">" +
                             "              <div class=\"message message-to\">" +
                             "                  <span>"+message.text+"</span>" +
-                            "                  <span class=\"message-right-block msg-time\">"+parseDateSent(new Date(message.dateSent))+"</span>";
+                            "                  <span class=\"message-right-block msg-time\">"+parseDate(new Date(message.dateSent))+"</span>";
 
                         messageInfo += (message.dateRead == null) ? "<span class=\"message-right-block buttons\">" +
                             "               <i onclick=\"messageUpdate("+message.id+",'"+message.text+"')\" class=\"\" style=\"margin-right: 2px\"></i>" +
@@ -311,7 +305,7 @@
                         messageInfo = "<div style=\"width: 100%\">" +
                             "              <div class=\"message message-from\">" +
                             "                   <span>"+message.text+"</span>" +
-                            "                   <span class=\"message-right-block msg-time\">"+parseDateSent(new Date(message.dateSent))+"</span>" +
+                            "                   <span class=\"message-right-block msg-time\">"+parseDate(new Date(message.dateSent))+"</span>" +
                             "              </div>" +
                             "          </div>";
 
@@ -338,7 +332,7 @@
                     let dialogs;
                     dialogs ="<li id=\"user"+conv.userId+"\" class=\"msg-button\" onclick=\"changeRecipient("+conv.userId+")\"><div style=\"float: left;width: 60px;\">";
                     dialogs += "</div><div style=\"margin-left: 60px;padding: 5px 0;\"><div class=\"msg-date-block\" style=\"width: 70px\">";
-                    dialogs += (conv.messageDateSent != null) ? parseDateToString(new Date(conv.messageDateSent)) : "";
+                    dialogs += (conv.messageDateSent != null) ? parseDate(new Date(conv.messageDateSent)) : "";
                     dialogs += "</div><div class=\"msg-user-name\" style=\"margin-right: 70px\">";
                     dialogs += conv.userLastName+" "+conv.userFirstName;
                     dialogs += "</div></div><div style=\"margin-left: 60px;\"><div style=\"float: right;width: 25px;padding-right: 5px\">";
@@ -381,5 +375,24 @@
     }
 
 
+    function parseDate(currentDate) {
+        const now = new Date();
+
+        if(now > currentDate){
+            if(now.getFullYear()>currentDate.getFullYear()){
+                return now.getFullYear()-currentDate.getFullYear()+'y.'
+            } else if(now.getMonth()>currentDate.getMonth()){
+                return now.getMonth()-currentDate.getMonth()+'m.'
+            } else if(now.getDate()>currentDate.getDate()){
+                return now.getDate()-currentDate.getDate()+'d.'
+            } else if(now.getHours()>currentDate.getHours()){
+                return now.getHours()-currentDate.getHours()+'h.'
+            } else if(now.getMinutes()>currentDate.getMinutes()){
+                return now.getMinutes()-currentDate.getMinutes()+'m.'
+            } else {
+                return now.getSeconds()-currentDate.getSeconds()+'s.'
+            }
+        }
+    }
 </script>
 </html>

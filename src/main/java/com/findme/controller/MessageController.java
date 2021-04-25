@@ -33,9 +33,9 @@ public class MessageController {
 
 
     @RequestMapping(path = "/messages/{userId}", method = RequestMethod.GET)
-    public String messagesByUser(HttpSession session, Model model, @PathVariable String userId){
+    public String messagesByUser(HttpSession session, Model model, @PathVariable String userId) {
         String loggedUserId = (String) session.getAttribute("loggedUserId");
-        if(loggedUserId==null) {
+        if (loggedUserId == null) {
             log.warn("User is not authorized");
             model.addAttribute("error", new BadRequestException("You are not logged in to see this information."));
             return "errors/forbidden";
@@ -50,9 +50,9 @@ public class MessageController {
     }
 
     @RequestMapping(path = "/messages", method = RequestMethod.GET)
-    public String messages(HttpSession session, Model model){
+    public String messages(HttpSession session, Model model) {
         String loggedUserId = (String) session.getAttribute("loggedUserId");
-        if(loggedUserId==null) {
+        if (loggedUserId == null) {
             log.warn("User is not authorized");
             model.addAttribute("error", new BadRequestException("You are not logged in to see this information."));
             return "errors/forbidden";
@@ -63,5 +63,4 @@ public class MessageController {
 
         return "messages";
     }
-
 }

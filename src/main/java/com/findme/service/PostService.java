@@ -11,6 +11,7 @@ import com.findme.models.User;
 import com.findme.validation.post.AbstractPostValidator;
 import com.findme.validation.post.PostValidatorParams;
 import com.findme.validation.post.UserPagePostedValidator;
+import com.findme.validation.post.UserTaggedValidator;
 import lombok.extern.log4j.Log4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,6 +53,8 @@ public class PostService {
 
         post.setUserPagePosted(post.getUserPagePosted());
         AbstractPostValidator usersValidator = new UserPagePostedValidator();
+        AbstractPostValidator usersTaggedValidator = new UserTaggedValidator();
+       // usersValidator.setNextAbstractChainValidator(usersTaggedValidator);
         usersValidator.check(
                 PostValidatorParams.builder()
                         .post(post)

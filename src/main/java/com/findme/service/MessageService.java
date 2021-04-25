@@ -61,7 +61,7 @@ public class MessageService {
     }
 
     public List<Message> getMessageList(String userFromId, String userToId) throws InternalServerError {
-  //      messageDAO.updateDateRead(userFromId, userToId);
+        messageDAO.updateDateRead(userFromId, userToId);
         return messageDAO.getMessageList(userFromId, userToId);
     }
 
